@@ -275,7 +275,6 @@ Planet.prototype.random = function(max,negative) {
     this.radius = 150 + getRandomInt(0,250)
     this.mass = this.radius*this.radius;
 
-
     if(negative) {
         this.x = this.x-(max.x/2);
         this.y = this.y-(max.y/2);
@@ -299,7 +298,7 @@ Bullet.prototype = new Particle( );
 function SpaceShip() {
     this.z = 0;
 
-    this.color = "red";
+    this.color = "red"; // TODO: implement this
     this.angle = 180;
     this.angle = 0;
     this.turn_amount = 6.2
@@ -323,8 +322,8 @@ function SpaceShip() {
     this.thrust = [{x:-4, y:-3},{x:-11,  y:0},{x:-4,  y:3}]
     this.shape_rot = self.shape;
     this.thrust_rot = self.thrust;
-
 }
+
 SpaceShip.prototype = new Particle( );
 
 SpaceShip.prototype.update = function() {
@@ -369,7 +368,6 @@ SpaceShip.prototype.explode = function() {
     };    
     this.sub(this.speed.copy().mul(20))
     this.speed = new Vector()
-    // resetStars()
     this.landed = false;
 }
 SpaceShip.prototype.turn = function(amount) {
@@ -445,11 +443,7 @@ SpaceShip.prototype.render = function(ctx) {
 }
 
 
-
-
-
-
-
+/* TODO: package all this up into a 'class' */
 var bg_canvas_id = "#bg-canvas"
 var bg_pressed_keys = [];
 
@@ -464,10 +458,7 @@ var bg_edge_threshhold = new Vector(window.innerWidth*.2,window.innerHeight*.2);
 var bg_minimap_scale = .0125
 var bg_minimap_scale = .0100
 var bg_minimap_center = new Vector(130,130);
-var bg_minimap_radius = 60
 var bg_minimap_radius = 90
-// var bg_minimap_radius = 400
-// var bg_minimap_radius = 500
 
 var bg_stars = [];
 var bg_star_amount = 100;
@@ -558,12 +549,10 @@ function renderMinimap(ctx) {
     d1 = rotate_point(bg_minimap_radius,0,0,0,bg_space_ship.angle)
     d1 = new Vector(d1.x,d1.y)
     d1.add(bg_minimap_center)
-    // d1.x-=bg_minimap_radius
 
     d2 = rotate_point(bg_minimap_radius-(bg_minimap_radius*.1),0,0,0,bg_space_ship.angle)
     d2 = new Vector(d2.x,d2.y)
     d2.add(bg_minimap_center)
-    // d2.x-=bg_minimap_radius
 
     ctx.arc(d2.x,d2.y,2,0,Math.PI*2,true);
     ctx.strokeStyle = "rgba(255,255,255, 1)";
@@ -644,8 +633,6 @@ function bgRender() {
         if(!isOnScreen(p))
         {
             bg_bullets.splice(i,1)
-            // i=i+1
-            // continue;
         }
     };
 
@@ -660,11 +647,9 @@ function bgRender() {
         ctx.fill();
         ctx.stroke();
         ang = angle_to_target(planet,bg_space_ship)
-        // console.log(ang)
         rot = rotate_point(planet.radius,0,0,0,ang)
         v = planet.copy().add(new Vector(rot.x,rot.y))
         v = bgTranslate(v)
-        // console.log(v)
         ctx.beginPath();
         ctx.moveTo(p.x,p.y);
         ctx.moveTo(v.x,v.y);
@@ -739,7 +724,7 @@ $(function () {
     $(document.body).keyup(function (evt) {
         var val = bg_pressed_keys[evt.keyCode];
         if (val) {
-            bg_pressed_keys[evt.keyCode]=false;
+            bg_pressed_keys[evt.keyCode] = false;
         }
     });
 
