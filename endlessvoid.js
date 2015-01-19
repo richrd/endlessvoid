@@ -1,9 +1,8 @@
 /*
 Canvas 2D Space
-Richard Lewis 2014
-bittemple.net
+Richard Lewis 2015
+http://bittemple.net
 */
-
 
 /**
  * Rotate 2d coordinates around a point and get new coordinates
@@ -16,7 +15,6 @@ function rotate_point(pointX, pointY, originX, originY, angle) {
     };
 
 }
-
 
 /**
  * Rotate each cordinate in an array and return a new array
@@ -31,7 +29,6 @@ function rotate_points(points,origin,angle) {
     new_p.reverse();
     return new_p;
 }
-
 
 /**
  * Check if a point is within the browser window
@@ -48,14 +45,12 @@ function isOnScreen(v) {
 }
 
 
-
 /**
  * Get a ranom intiger within a range
  */
 function getRandomInt (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 
 /**
  * Calculate the angle between two cordinates TODO: incorrect results, fix it
@@ -76,7 +71,6 @@ function angle_to_target(pos1, pos2) {
     return theta
 }
 
-
 /**
  * An object representing a a point, with methods for common transformations
  */
@@ -86,12 +80,12 @@ function Vector(x,y,z) {
     this.z = typeof z !== 'undefined' ? z : 0;
 }
 Vector.prototype.set = function(v) {
-    this.x=v.x
-    this.y=v.y
-    this.z=v.z
+    this.x = v.x
+    this.y = v.y
+    this.z = v.z
 }
 Vector.prototype.copy = function() {
-    v = new Vector(this.x,this.y,this.z)
+    v = new Vector(this.x, this.y, this.z)
     return v;
 }
 Vector.prototype.add = function(v) {
@@ -116,14 +110,14 @@ Vector.prototype.combine = function() {
     return Math.abs(this.x)+Math.abs(this.y)
 }
 Vector.prototype.dist = function(v) {
-    xd = this.x-v.x
-    yd = this.y-v.y
+    xd = this.x - v.x
+    yd = this.y - v.y
     return Math.sqrt(   Math.pow(Math.abs(xd),2) + Math.pow(Math.abs(yd),2)   );
 }
 Vector.prototype.invert = function() {
-    this.x = this.x*-1
-    this.y = this.y*-1
-    this.z = this.z*-1
+    this.x = this.x * -1
+    this.y = this.y * -1
+    this.z = this.z * -1
     return this
 }
 Vector.prototype.random = function(max,negative) {
@@ -140,7 +134,6 @@ Vector.prototype.random = function(max,negative) {
     }
     return this
 }
-
 
 /**
  * A particle object with a position and speed. Used as a foundation for things in space
@@ -165,16 +158,6 @@ function Star() {
     this.twinkle = false;
 }
 Star.prototype = new Particle( );
-// Vector.prototype.add = function(v) {
-//     this.x = this.x + v.x
-//     this.y = this.y + v.y
-//     return this
-// }
-// Vector.prototype.sub = function(v) {
-//     this.x = this.x - v.x
-//     this.y = this.y - v.y
-//     return this
-// }
 Star.prototype.warp = function() {
     this.twinkle = false;
     if(getRandomInt(0,10)==5) {
@@ -232,7 +215,6 @@ Star.prototype.update = function() {
         this.z = getRandomInt(0,99)
     }
 }
-
 
 /**
  * A planet object that has gravity
@@ -301,7 +283,6 @@ Planet.prototype.random = function(max,negative) {
     }
 }
 
-
 /**
  * A bullet that the spaceship can fire
  */
@@ -311,7 +292,6 @@ function Bullet(x,y,z) {
     this.z = typeof z !== 'undefined' ? z : 0;
 }
 Bullet.prototype = new Particle( );
-
 
 /**
  * The space ship
@@ -470,14 +450,6 @@ SpaceShip.prototype.render = function(ctx) {
 
 
 
-
-
-
-
-
-
-
-
 var bg_canvas_id = "#bg-canvas"
 var bg_pressed_keys = [];
 
@@ -522,8 +494,6 @@ function resetStars() {
         star.set(new_pos)
     };
 }
-
-
 
 
 function bgLoad() {
