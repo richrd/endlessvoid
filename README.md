@@ -24,6 +24,7 @@ The ultimate goal is making it multi player.
 * [ ] Different looking planets with more variation in size
 * [ ] Different looking ships
 * [ ] Suns with orbiting planets (and planets with moons?)
+* [ ] Asteroids with polygons
 * [ ] Some other flying stuff?!
 * [ ] ...
 

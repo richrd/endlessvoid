@@ -127,7 +127,8 @@ Star.prototype.update = function() {
 /**
  * A planet object that has gravity
  */
-function Planet() {
+function Planet(main) {
+    this.main = main
     this.radius = 240;
     this.mass = this.radius*this.radius;
     this.max_dist = 40000;
@@ -138,30 +139,30 @@ Planet.prototype = new Particle( );
 Planet.prototype.warp = function() {
     p = new Vector();
     p.random(new Vector(window.innerWidth*(50,window.innerHeight*50,99)));
-    angle = angle_to_target(bg_space_ship.speed,{x:0,y:0})
+    angle = angle_to_target(this.main.bg_space_ship.speed,{x:0,y:0})
     distance = rotate_point(this.max_dist/2,0,0,0,angle)
-    // p.add(bg_space_ship).add(distance) //.add(bg_space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
-    p.add(bg_space_ship).add(distance).add(bg_space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
+    // p.add(this.main.bg_space_ship).add(distance) //.add(this.main.bg_space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
+    p.add(this.main.bg_space_ship).add(distance).add(this.main.bg_space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
     this.set(p)
 }
 Planet.prototype.update = function() {
-    if(bg_space_ship.dist(this)>this.max_dist) {
+    if(this.main.bg_space_ship.dist(this)>this.max_dist) {
         this.warp()
     }
-    if(bg_space_ship.landed) {return}
-    dist = this.dist(bg_space_ship)
+    if(this.main.bg_space_ship.landed) {return}
+    dist = this.dist(this.main.bg_space_ship)
 
     // Handle Gravity
     if(dist<this.max_gravity_dist) {
-        if(dist<bg_space_ship.radius+this.radius) {
-            if(Math.abs(bg_space_ship.speed.x)+Math.abs(bg_space_ship.speed.y)>2.4){
-                bg_space_ship.explode()
+        if(dist<this.main.bg_space_ship.radius+this.radius) {
+            if(Math.abs(this.main.bg_space_ship.speed.x)+Math.abs(this.main.bg_space_ship.speed.y)>2.4){
+                this.main.bg_space_ship.explode()
             }
             else {
-                bg_space_ship.land();
+                this.main.bg_space_ship.land();
             }
         }
-        P2=bg_space_ship
+        P2=this.main.bg_space_ship
         P = this
         XDiff = P.x - P2.x
         YDiff = P.y - P2.y
@@ -173,7 +174,7 @@ Planet.prototype.update = function() {
         XComponent = XDiff/Distance
         YComponent = YDiff/Distance
         v = new Vector(Acceleration * XComponent,Acceleration * YComponent)
-        bg_space_ship.speed.add(v)
+        this.main.bg_space_ship.speed.add(v)
     }
 }
 Planet.prototype.random = function(max,negative) {
@@ -204,7 +205,8 @@ Bullet.prototype = new Particle( );
 /**
  * The space ship
  */
-function SpaceShip() {
+function SpaceShip(main) {
+    this.main = main
     this.z = 0;
 
     this.color = "red"; // TODO: implement this
@@ -239,41 +241,41 @@ SpaceShip.prototype.update = function() {
     if(this.landed) {return;}
     this.x = this.x + this.speed.x;
     this.y = this.y + this.speed.y;
-    screen_pos = bgTranslate(this.copy())
+    screen_pos = this.main.bgTranslate(this.copy())
 
-    if(screen_pos.x < bg_edge_threshhold.x) {
-        add = new Vector(bg_edge_threshhold.x-screen_pos.x,0)
-        bg_origin.add(add)
-        updateStars(add)
+    if(screen_pos.x < this.main.bg_edge_threshhold.x) {
+        add = new Vector(this.main.bg_edge_threshhold.x-screen_pos.x,0)
+        this.main.bg_origin.add(add)
+        this.main.updateStars(add)
     }
-    if(screen_pos.y < bg_edge_threshhold.y) {
-        add = new Vector(0,bg_edge_threshhold.y-screen_pos.y)
-        bg_origin.add(add)
-        updateStars(add)
+    if(screen_pos.y < this.main.bg_edge_threshhold.y) {
+        add = new Vector(0,this.main.bg_edge_threshhold.y-screen_pos.y)
+        this.main.bg_origin.add(add)
+        this.main.updateStars(add)
     }
-    if(screen_pos.x > window.innerWidth-bg_edge_threshhold.x) {
-        add = new Vector(window.innerWidth-bg_edge_threshhold.x-screen_pos.x,0)
-        bg_origin.add(add)
-        updateStars(add)
+    if(screen_pos.x > window.innerWidth-this.main.bg_edge_threshhold.x) {
+        add = new Vector(window.innerWidth-this.main.bg_edge_threshhold.x-screen_pos.x,0)
+        this.main.bg_origin.add(add)
+        this.main.updateStars(add)
     }
-    if(screen_pos.y > window.innerHeight-bg_edge_threshhold.y) {
-        add = new Vector(0,window.innerHeight-bg_edge_threshhold.y-screen_pos.y)
-        bg_origin.add(add)
-        updateStars(add)
+    if(screen_pos.y > window.innerHeight-this.main.bg_edge_threshhold.y) {
+        add = new Vector(0,window.innerHeight-this.main.bg_edge_threshhold.y-screen_pos.y)
+        this.main.bg_origin.add(add)
+        this.main.updateStars(add)
     }
 }
 SpaceShip.prototype.shoot = function() {
     bullet = new Bullet(this.x,this.y);
     bullet.speed=this.speed.copy()
     bullet.speed.add(rotate_point(20.5,0,0,0,this.angle))
-    bg_bullets.push(bullet)
+    this.main.bg_bullets.push(bullet)
 }
 SpaceShip.prototype.explode = function() {
     for (var i = 0; i < 20; i++) {
-        bullet = new Bullet(this.x,this.y);
+        bullet = new Bullet(this.x, this.y);
         bullet.speed=new Vector()
-        bullet.speed.add(rotate_point(2.5,0,0,0,getRandomInt(0,360)))
-        bg_bullets.push(bullet)
+        bullet.speed.add(rotate_point(2.5, 0, 0, 0, getRandomInt(0, 360)))
+        this.main.bg_bullets.push(bullet)
     };    
     this.sub(this.speed.copy().mul(20))
     this.speed = new Vector()
@@ -324,11 +326,11 @@ SpaceShip.prototype.render = function(ctx) {
     ctx.strokeStyle = "rgba(156,232,255, 0.9)";
     ctx.beginPath();
 
-    p = bgTranslate(this.copy().add(this.shape_rot[0]))
+    p = this.main.bgTranslate(this.copy().add(this.shape_rot[0]))
     ctx.lineTo(p.x,p.y)
     for (var i = this.shape_rot.length - 1; i >= 0; i--) {
         point = this.shape_rot[i]
-        p = bgTranslate(this.copy().add(point))
+        p = this.main.bgTranslate(this.copy().add(point))
         ctx.lineTo(p.x,p.y)
     };
     ctx.stroke();
@@ -338,10 +340,10 @@ SpaceShip.prototype.render = function(ctx) {
             ctx.strokeStyle = "rgba(100,100,255, 0.9)";
         }
         ctx.beginPath();
-        p = bgTranslate(this.copy().add(this.thrust_rot[0]))
+        p = this.main.bgTranslate(this.copy().add(this.thrust_rot[0]))
         ctx.lineTo(p.x,p.y)
         for (var i = this.thrust_rot.length - 1; i >= 0; i--) {
-            p = bgTranslate(this.copy().add(this.thrust_rot[i]))
+            p = this.main.bgTranslate(this.copy().add(this.thrust_rot[i]))
             ctx.lineTo(p.x,p.y)
         };
         ctx.stroke();
