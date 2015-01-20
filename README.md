@@ -17,6 +17,7 @@ The ultimate goal is making it multi player.
 ## TODO
 
 * [ ] Clean up code and refactor it into proper modern js
+* [ ] Improve planet generation
 * [ ] Create proper game logic
 * [ ] Pause game feature
 * [ ] Pickups for ship upgrades, points etc
