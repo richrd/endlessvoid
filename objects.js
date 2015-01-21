@@ -1,7 +1,8 @@
+
 /**
- * An object representing a a point, with methods for common transformations
+ * A vector object representing xyz coordinates, with methods for common operations
  */
-function Vector(x,y,z) {
+function Vector(x, y, z) {
     this.x = typeof x !== 'undefined' ? x : 0;
     this.y = typeof y !== 'undefined' ? y : 0;
     this.z = typeof z !== 'undefined' ? z : 0;

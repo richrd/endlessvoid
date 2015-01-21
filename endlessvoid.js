@@ -4,48 +4,6 @@ Richard Lewis 2015
 http://bittemple.net
 */
 
-/*
-Vector.prototype.copy = function() {
-    v = new Vector(this.x, this.y, this.z)
-    return v;
-}
-Vector.prototype.add = function(v) {
-    this.x = this.x + v.x
-    this.y = this.y + v.y
-    this.z = this.z + v.z
-    return this
-}
-Vector.prototype.sub = function(v) {
-    this.x = this.x - v.x
-    this.y = this.y - v.y
-    this.z = this.z - v.z
-    return this
-}
-Vector.prototype.mul = function(m) {
-    this.x = this.x * m
-    this.y = this.y * m
-    this.z = this.z * m
-    return this
-}
-Vector.prototype.combine = function() {
-    return Math.abs(this.x)+Math.abs(this.y)
-}
-Vector.prototype.dist = function(v) {
-    xd = this.x - v.x
-    yd = this.y - v.y
-    return Math.sqrt(   Math.pow(Math.abs(xd),2) + Math.pow(Math.abs(yd),2)   );
-}
-Vector.prototype.invert = function() {
-    this.x = this.x * -1
-    this.y = this.y * -1
-    this.z = this.z * -1
-
-*/
-
-
-/**
- * An object representing a a point, with methods for common transformations
- */
 function EndlessVoid() {
     this.bg_canvas_id = "#bg-canvas"
     this.bg_pressed_keys = [];
@@ -55,8 +13,7 @@ function EndlessVoid() {
 
     this.bg_origin = new Vector();
     this.bg_space_ship = new SpaceShip(this);
-    this.bg_edge_threshhold = new Vector(window.innerWidth*.2,window.innerHeight*.2);
-
+    this.bg_edge_threshhold = new Vector(window.innerWidth*.2, window.innerHeight*.2);
 
     this.bg_minimap_scale = .0125
     this.bg_minimap_scale = .0100
@@ -74,7 +31,6 @@ function EndlessVoid() {
 }
 
 EndlessVoid.prototype.load = function() {
-    // $(document).bind('keydown','alt+space',function() {$("#background").toggleClass("show")});
     $(document.body).keydown($.proxy(function (evt) {
         if(!this.bg_pressed_keys[evt.keyCode]) {
             this.bg_pressed_keys[evt.keyCode] = true;
@@ -87,15 +43,12 @@ EndlessVoid.prototype.load = function() {
             this.bg_pressed_keys[evt.keyCode] = false;
         }
     }, this));
-
-    // $("#background").click(function() {$("#background").toggleClass("show")});
 }
 
 EndlessVoid.prototype.start = function() {
     if(this.bgLoad()) {
         this.bgRender();
     }
-    // this.bg_interval_id = setInterval("bgRender()", this.bg_interval_ms);
     this.bg_interval_id = setInterval($.proxy(this.bgRender, this), this.bg_interval_ms);
 }
 
@@ -116,7 +69,6 @@ EndlessVoid.prototype.resetStars = function() {
         star.set(new_pos)
     };
 }
-
 
 EndlessVoid.prototype.bgLoad = function() {
     // Create stars.
@@ -229,7 +181,6 @@ EndlessVoid.prototype.bgRender = function() {
         planet.update()
     }
 
-
     ctx.strokeStyle = "rgba(240,240,210, .98)";
     for (var i = this.bg_stars.length - 1; i >= 0; i--) {
         star = this.bg_stars[i]
@@ -243,7 +194,6 @@ EndlessVoid.prototype.bgRender = function() {
     };
 
     ctx.strokeStyle = "rgba(200,255,255, 1)";
-    // console.log(this.bg_bullets)
     for (var i = this.bg_bullets.length - 1; i >= 0; i--) {
         bullet = this.bg_bullets[i]
         bullet.update()
@@ -264,6 +214,8 @@ EndlessVoid.prototype.bgRender = function() {
         planet = this.bg_planets[i]
         ctx.beginPath();
         p = this.bgTranslate(planet)
+        // Replace checking center coordinates 
+        // with checking the bounding rects  
         // if(!isOnScreen(p)) {continue;}
         ctx.arc(p.x, p.y, planet.radius, 0, Math.PI*2, true);
         ctx.fill();
@@ -314,48 +266,15 @@ EndlessVoid.prototype.bgHandleKeys = function() {
     }
 
     if(this.bg_pressed_keys[48]) {
-        this.bg_space_ship.x=0
-        this.bg_space_ship.y=0
+        this.bg_space_ship.x = 0
+        this.bg_space_ship.y = 0
         this.bg_space_ship.speed = new Vector();
     }
 
 }
 
-// function toggleBackground() {
-//     if(window.bg_interval_id != null) {
-//         $("#background").fadeOut()
-//         clearInterval(window.bg_interval_id);
-//         window.bg_interval_id = null;
-//     }
-//     else {
-//         window.bg_interval_id = setInterval("bgRender()",60);
-//         $("#background").fadeIn()
-//     }
-// }
-
 $(function () {
-    // $(document).bind('keydown','alt+space',function() {$("#background").toggleClass("show")});
-    // $(document.body).keydown(function (evt) {
-    //     if(!bg_pressed_keys[evt.keyCode]) {
-    //         bg_pressed_keys[evt.keyCode] = true;
-    //     }
-    // });
-
-    // $(document.body).keyup(function (evt) {
-    //     var val = bg_pressed_keys[evt.keyCode];
-    //     if (val) {
-    //         bg_pressed_keys[evt.keyCode] = false;
-    //     }
-    // });
-
-    // $("#background").click(function() {$("#background").toggleClass("show")});
-
-    // if(bgLoad()) {
-    //     bgRender();
-    // }
-    // window.bg_interval_id = setInterval("bgRender()",bg_interval_ms);
     app = new EndlessVoid();
     app.load()
     app.start()
 });
-
