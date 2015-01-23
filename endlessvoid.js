@@ -56,7 +56,8 @@ EndlessVoid.prototype.start = function() {
 EndlessVoid.prototype.updateStars = function(add) {
     for (var i = this.bg_stars.length - 1; i >= 0; i--) {
         star = this.bg_stars[i]
-        star.move(add)
+        star.move(add.mul(star.z_multiplier))
+        //p.z_multiplier = mul
     };
 }
 
@@ -73,8 +74,13 @@ EndlessVoid.prototype.resetStars = function() {
 EndlessVoid.prototype.bgLoad = function() {
     // Create stars.
     for (var i = 0; i < this.bg_star_amount; i++) {
+        mul = 1
+        if (i > this.bg_star_amount/2) {
+            mul = 0.98
+        }
         p = new Star();
         p.random(new Vector(window.innerWidth, window.innerHeight, 99), false);
+        p.z_multiplier = mul
         p.warp()
         this.bg_stars.push(p)
     };
