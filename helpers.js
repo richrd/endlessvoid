@@ -63,3 +63,57 @@ function angle_to_target(pos1, pos2) {
     }
     return theta
 }
+
+/**
+ * Convert HSV to RGB
+ */
+ 
+function hsv_to_rgb(color) {
+    h = color[0] / 255
+    s = color[1] / 255
+    v = color[2] / 255
+    //console.log(h,s,v);
+    h_i = parseInt(h*6)
+    f = h*6 - h_i
+    p = v * (1 - s)
+    q = v * (1 - f*s)
+    t = v * (1 - (1 - f) * s)
+    //console.log(h_i);
+    if (h_i == 0) {
+        r = v
+        g = t
+        b = p
+    }
+    if (h_i == 1) {
+        r = q
+        g = v
+        b = p
+    }
+    if (h_i == 2) {
+        r = p
+        g = v
+        b = t
+    }
+    if (h_i == 3) {
+        r = p
+        g = q
+        b = v
+    }
+    if (h_i == 4) {
+        r = t
+        g = p
+        b = v
+    }
+    if (h_i == 5) {
+        r = v
+        g = p
+        b = q
+    }
+    
+    rgb = [parseInt(r*256), parseInt(g*256), parseInt(b*256)]
+    //console.log(rgb)
+    return rgb
+}
+ 
+ 
+ 

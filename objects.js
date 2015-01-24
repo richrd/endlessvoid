@@ -69,33 +69,37 @@ Vector.prototype.random = function(max,negative) {
 function Particle() {
     this.max_x = 9999
     this.max_y = 9999
-    this.speed = new Vector(0,0);
+    this.speed = new Vector(0, 0);
 }
 Particle.prototype = new Vector( );
 Particle.prototype.update = function() {
     this.x = this.x + this.speed.x;
     this.y = this.y + this.speed.y;
-
 }
 
 
 /**
- * A star object
+ * A small star used in the background star field
  */
-function Star() {
+function BgStar() {
     this.twinkle = false;
+    this.color = [255, 255, 255];
 }
-Star.prototype = new Particle( );
-Star.prototype.warp = function() {
+BgStar.prototype = new Particle( );
+BgStar.prototype.warp = function() {
     this.twinkle = false;
-    if(getRandomInt(0,10)==5) {
+    this.color = [255, 255, 255];
+    if(getRandomInt(0, 10) == 5) {
         this.twinkle = true;
+    } else {
+        this.z = getRandomInt(0, 99);
     }
-    else {
-        this.z = getRandomInt(0,99)
+    if(getRandomInt(0, 150) >  149) {
+        this.color = hsv_to_rgb( [getRandomInt(0,255), 205, 250] )
+        this.z = getRandomInt(0, 50) + 49;
     }
 }
-Star.prototype.move = function(add) {
+BgStar.prototype.move = function(add) {
     this.add(add)
     if(this.x < 0) {
         this.x = window.innerWidth
@@ -118,7 +122,8 @@ Star.prototype.move = function(add) {
         this.warp()
     }
 }
-Star.prototype.update = function() {
+
+BgStar.prototype.update = function() {
     if(this.twinkle) {
         this.z = getRandomInt(0,99)
     }
@@ -140,42 +145,43 @@ Planet.prototype = new Particle( );
 Planet.prototype.warp = function() {
     p = new Vector();
     p.random(new Vector(window.innerWidth*(50,window.innerHeight*50,99)));
-    angle = angle_to_target(this.main.bg_space_ship.speed,{x:0,y:0})
+    angle = angle_to_target(this.main.space_ship.speed,{x:0,y:0})
     distance = rotate_point(this.max_dist/2,0,0,0,angle)
-    // p.add(this.main.bg_space_ship).add(distance) //.add(this.main.bg_space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
-    p.add(this.main.bg_space_ship).add(distance).add(this.main.bg_space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
+    // p.add(this.main.space_ship).add(distance) //.add(this.main.space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
+    p.add(this.main.space_ship).add(distance).add(this.main.space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
     this.set(p)
 }
+
 Planet.prototype.update = function() {
-    if(this.main.bg_space_ship.dist(this)>this.max_dist) {
+    if(this.main.space_ship.dist(this)>this.max_dist) {
         this.warp()
     }
-    if(this.main.bg_space_ship.landed) {return}
-    dist = this.dist(this.main.bg_space_ship)
+    if(this.main.space_ship.landed) {return}
+    dist = this.dist(this.main.space_ship)
 
     // Handle Gravity
-    if(dist<this.max_gravity_dist) {
-        if(dist<this.main.bg_space_ship.radius+this.radius) {
-            if(Math.abs(this.main.bg_space_ship.speed.x)+Math.abs(this.main.bg_space_ship.speed.y)>2.4){
-                this.main.bg_space_ship.explode()
+    if(dist < this.max_gravity_dist) {
+        if(dist<this.main.space_ship.radius+this.radius) {
+            if(Math.abs(this.main.space_ship.speed.x)+Math.abs(this.main.space_ship.speed.y)>2.4){
+                this.main.space_ship.explode()
             }
             else {
-                this.main.bg_space_ship.land();
+                this.main.space_ship.land();
             }
         }
-        P2=this.main.bg_space_ship
+        P2 = this.main.space_ship
         P = this
         XDiff = P.x - P2.x
         YDiff = P.y - P2.y
-        Distance = Math.sqrt((Math.pow(XDiff,2))+(Math.pow(YDiff,2)))
+        Distance = Math.sqrt((Math.pow(XDiff, 2))+(Math.pow(YDiff, 2)))
         if (Distance < 2) {Distance = 2}
-        a=0.125
+        a = 0.125
         Force = a*(P.mass*P2.mass)/Math.pow(Distance,2)*4
         Acceleration = Force / (P2.mass*2)
         XComponent = XDiff/Distance
         YComponent = YDiff/Distance
         v = new Vector(Acceleration * XComponent,Acceleration * YComponent)
-        this.main.bg_space_ship.speed.add(v)
+        this.main.space_ship.speed.add(v)
     }
 }
 Planet.prototype.random = function(max,negative) {
@@ -193,6 +199,62 @@ Planet.prototype.random = function(max,negative) {
     }
 }
 
+
+
+/**
+ * A star object that has orbiting planets
+ */
+function Sun(main) {
+    this.main = main
+    this.radius = 540;
+    this.mass = this.radius*this.radius;
+    this.max_dist = 40000;
+    this.max_gravity_dist = 3600;
+
+    this.min_planets = 1
+    this.max_planets = 4
+
+    this.planets = []
+    this.generate_planets();
+}
+
+Sun.prototype = new Particle( );
+
+Sun.prototype.rand_int = function(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+Sun.prototype.generate_planets = function() {
+    amount = this.rand_int(this.min_planets, this.max_planets);
+    i = 0;
+    while (i < amount) {
+        p = new Planet(this);
+        // From endlessvoid.js
+        p.random(new Vector(window.innerWidth*40, window.innerHeight*40, 99));
+        planet = null;
+        //p = new Vector();
+        //p.random(new Vector(window.innerWidth*(50,window.innerHeight*50,99)));
+        //angle = angle_to_target(this.main.space_ship.speed,{x:0,y:0})
+        //distance = rotate_point(this.max_dist/2,0,0,0,angle)
+        //// p.add(this.main.space_ship).add(distance) //.add(this.main.space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
+        //p.add(this.main.space_ship).add(distance).add(this.main.space_ship.speed.copy().mul(102)) // Planets vanish at high speeds
+        //this.set(p)
+        i += 1;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * A bullet that the spaceship can fire
  */
@@ -202,6 +264,12 @@ function Bullet(x,y,z) {
     this.z = typeof z !== 'undefined' ? z : 0;
 }
 Bullet.prototype = new Particle( );
+
+
+
+
+
+
 
 /**
  * The space ship
@@ -228,10 +296,15 @@ function SpaceShip(main) {
     this.speed_v = 0;
     this.speed_max = 50
 
-    this.shape = [{x:10,  y:0},{x:-6,  y:7},{x:-2,  y:0},{x:-6, y:-7}]
- 
-    this.thrust = [{x:-3, y:-4},{x:0,  y:-11},{x:3,  y:-4}]
-    this.thrust = [{x:-4, y:-3},{x:-11,  y:0},{x:-4,  y:3}]
+    this.shape = [
+        {x:10, y:0},
+        {x:-6,  y:7},
+        {x:-2,  y:0},
+        {x:-6, y:-7}
+    ]
+    
+    //this.thrust = [{x:-3, y:-4}, {x:0,  y:-11}, {x:3, y:-4}]
+    this.thrust = [{x:-4, y:-3}, {x:-11, y:0}, {x:-4, y:3}]
     this.shape_rot = self.shape;
     this.thrust_rot = self.thrust;
 }
@@ -244,24 +317,24 @@ SpaceShip.prototype.update = function() {
     this.y = this.y + this.speed.y;
     screen_pos = this.main.bgTranslate(this.copy())
 
-    if(screen_pos.x < this.main.bg_edge_threshhold.x) {
-        add = new Vector(this.main.bg_edge_threshhold.x-screen_pos.x,0)
-        this.main.bg_origin.add(add)
+    if(screen_pos.x < this.main.edge_threshhold.x) {
+        add = new Vector(this.main.edge_threshhold.x-screen_pos.x,0)
+        this.main.origin.add(add)
         this.main.updateStars(add)
     }
-    if(screen_pos.y < this.main.bg_edge_threshhold.y) {
-        add = new Vector(0,this.main.bg_edge_threshhold.y-screen_pos.y)
-        this.main.bg_origin.add(add)
+    if(screen_pos.y < this.main.edge_threshhold.y) {
+        add = new Vector(0,this.main.edge_threshhold.y-screen_pos.y)
+        this.main.origin.add(add)
         this.main.updateStars(add)
     }
-    if(screen_pos.x > window.innerWidth-this.main.bg_edge_threshhold.x) {
-        add = new Vector(window.innerWidth-this.main.bg_edge_threshhold.x-screen_pos.x,0)
-        this.main.bg_origin.add(add)
+    if(screen_pos.x > window.innerWidth-this.main.edge_threshhold.x) {
+        add = new Vector(window.innerWidth-this.main.edge_threshhold.x-screen_pos.x,0)
+        this.main.origin.add(add)
         this.main.updateStars(add)
     }
-    if(screen_pos.y > window.innerHeight-this.main.bg_edge_threshhold.y) {
-        add = new Vector(0,window.innerHeight-this.main.bg_edge_threshhold.y-screen_pos.y)
-        this.main.bg_origin.add(add)
+    if(screen_pos.y > window.innerHeight-this.main.edge_threshhold.y) {
+        add = new Vector(0,window.innerHeight-this.main.edge_threshhold.y-screen_pos.y)
+        this.main.origin.add(add)
         this.main.updateStars(add)
     }
 }
@@ -269,18 +342,19 @@ SpaceShip.prototype.shoot = function() {
     bullet = new Bullet(this.x,this.y);
     bullet.speed=this.speed.copy()
     bullet.speed.add(rotate_point(20.5,0,0,0,this.angle))
-    this.main.bg_bullets.push(bullet)
+    this.main.bullets.push(bullet)
 }
 SpaceShip.prototype.explode = function() {
     for (var i = 0; i < 20; i++) {
         bullet = new Bullet(this.x, this.y);
-        bullet.speed=new Vector()
+        bullet.speed = new Vector()
         bullet.speed.add(rotate_point(2.5, 0, 0, 0, getRandomInt(0, 360)))
-        this.main.bg_bullets.push(bullet)
-    };    
+        this.main.bullets.push(bullet)
+    };
     this.sub(this.speed.copy().mul(20))
     this.speed = new Vector()
     this.landed = false;
+    this.main.resetStars()
 }
 SpaceShip.prototype.turn = function(amount) {
     this.angle = this.angle + (this.turn_amount*amount);
