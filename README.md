@@ -16,6 +16,7 @@ The ultimate goal is making it multi player.
 
 ## TODO
 
+* [ ] Separate update and render operations and optimize rendering 
 * [ ] Clean up code and refactor it into proper modern js
 * [ ] Fix stars and add parallax effect
 * [ ] ~~Improve planet generation~~ Design sun, planet and moon generation.
