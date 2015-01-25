@@ -10,6 +10,7 @@ function EndlessVoid() {
 
     this.interval_ms = 40;
     this.interval_id = null;
+    this.paused = false;
 
     this.origin = new Vector();
     this.space_ship = new SpaceShip(this);
@@ -45,13 +46,28 @@ EndlessVoid.prototype.load = function() {
     }, this));
 }
 
+EndlessVoid.prototype.tick = function() {
+    this.handleKeys()
+    if (!this.paused) {
+        this.update()
+        this.render();
+    }
+}
+
 EndlessVoid.prototype.start = function() {
     if(this.bgLoad()) {
         this.bgRender();
     }
-    this.interval_id = setInterval($.proxy(this.bgRender, this), this.interval_ms);
+    this.interval_id = setInterval($.proxy(this.tick, this), this.interval_ms);
 }
 
+EndlessVoid.prototype.pause = function() {
+    if(!this.paused) {
+        this.paused = 1
+        return
+    }
+    this.paused = 0
+}
 
 EndlessVoid.prototype.updateStars = function(add) {
     for (var i = this.stars.length - 1; i >= 0; i--) {
@@ -146,34 +162,34 @@ EndlessVoid.prototype.renderMinimap = function(ctx) {
     };
 }
 
-EndlessVoid.prototype.bgRender = function() {
-    if(window.innerWidth+window.innerHeight < 1400) {return;}
+EndlessVoid.prototype.update = function() {
+    this.space_ship.update()
+    for (var i = this.planets.length - 1; i >= 0; i--) {
+        this.planets[i].update()
+    }
+    for (var i = this.bullets.length - 1; i >= 0; i--) {
+        this.bullets[i].update()
+    }
+}
 
-    this.bgHandleKeys()
+EndlessVoid.prototype.render = function() {
+    if(window.innerWidth+window.innerHeight < 1400) {return;}
 
     this.edge_threshhold.x = window.innerWidth * .4
     this.edge_threshhold.y = window.innerHeight * .4
 
     var ctx = $(this.canvas_id)[0].getContext('2d');
-
     ctx.canvas.width  = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
     center = new Vector(window.innerWidth/2, window.innerHeight/2);
 
-
     ctx.font = "20px Georgia";
     ctx.fillStyle = "rgb(255,255,255)";
-
     ctx.lineWidth = "1.5";
-    this.space_ship.update()
 
     // ctx.fillText("ship: "+parseInt(space_ship.x)+","+parseInt(space_ship.y),10,50);
     // ctx.fillText("orig ang: "+angle_to_target(space_ship,new Vector()),10,75);
     // ctx.fillText("ship ang: "+space_ship.angle,10,100);
-    for (var i = this.planets.length - 1; i >= 0; i--) {
-        planet = this.planets[i]
-        planet.update()
-    }
 
     ctx.strokeStyle = "rgba(240,240,210, .98)";
     for (var i = this.stars.length - 1; i >= 0; i--) {
@@ -189,7 +205,6 @@ EndlessVoid.prototype.bgRender = function() {
     ctx.strokeStyle = "rgba(200,255,255, 1)";
     for (var i = this.bullets.length - 1; i >= 0; i--) {
         bullet = this.bullets[i]
-        bullet.update()
         ctx.beginPath();
         p = this.bgTranslate(bullet)
 
@@ -237,8 +252,12 @@ EndlessVoid.prototype.bgRender = function() {
     this.renderMinimap(ctx)
 }
 
-EndlessVoid.prototype.bgHandleKeys = function() {
+EndlessVoid.prototype.handleKeys = function() {
     // Handle keys.
+    // console.log(this.pressed_keys)
+    if(this.pressed_keys[19]) {
+        this.pause();
+    }
     if(this.pressed_keys[37]) {
         this.space_ship.turn(-1)
     }
