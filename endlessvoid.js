@@ -1,8 +1,8 @@
 /*
-Canvas 2D Space
-Richard Lewis 2015
-http://bittemple.net
-*/
+ * Canvas 2D Space
+ * Richard Lewis 2015
+ * http://bittemple.net
+ */
 
 function EndlessVoid() {
     this.canvas_id = "#bg-canvas"
@@ -16,9 +16,8 @@ function EndlessVoid() {
     this.space_ship = new SpaceShip(this);
     this.edge_threshhold = new Vector(window.innerWidth*.2, window.innerHeight*.2);
 
-    this.minimap_scale = .0125
     this.minimap_scale = .0100
-    this.minimap_center = new Vector(130,130);
+    this.minimap_center = new Vector(130, 130);
     this.minimap_radius = 90
 
     this.stars = [];
@@ -33,16 +32,25 @@ function EndlessVoid() {
 
 EndlessVoid.prototype.load = function() {
     $(document.body).keydown($.proxy(function (evt) {
-        if(!this.pressed_keys[evt.keyCode]) {
-            this.pressed_keys[evt.keyCode] = true;
+        var key = evt.keyCode;
+        if(!this.pressed_keys[key]) {
+            this.pressed_keys[key] = true;
         }
     }, this));
 
     $(document.body).keyup($.proxy(function (evt) {
-        var val = this.pressed_keys[evt.keyCode];
+        var key = evt.keyCode;
+        var val = this.pressed_keys[key];
         if (val) {
             this.pressed_keys[evt.keyCode] = false;
         }
+        if (key == 19) {
+            this.pause();
+        }
+    }, this));
+
+    // Detect key
+    $(document.body).keyup($.proxy(function (evt) {
     }, this));
 }
 
@@ -90,6 +98,7 @@ EndlessVoid.prototype.bgLoad = function() {
     for (var i = 0; i < this.star_amount; i++) {
         mul = 1
         if (i > this.star_amount/2) {
+            //x=1
             mul = 0.98
         }
         p = new BgStar();
@@ -163,10 +172,13 @@ EndlessVoid.prototype.renderMinimap = function(ctx) {
 }
 
 EndlessVoid.prototype.update = function() {
+    // Update spaceship
     this.space_ship.update()
+    // Update planets (and gravity effect on space ship)
     for (var i = this.planets.length - 1; i >= 0; i--) {
         this.planets[i].update()
     }
+    // Update bullets
     for (var i = this.bullets.length - 1; i >= 0; i--) {
         this.bullets[i].update()
     }
@@ -254,10 +266,6 @@ EndlessVoid.prototype.render = function() {
 
 EndlessVoid.prototype.handleKeys = function() {
     // Handle keys.
-    // console.log(this.pressed_keys)
-    if(this.pressed_keys[19]) {
-        this.pause();
-    }
     if(this.pressed_keys[37]) {
         this.space_ship.turn(-1)
     }
@@ -282,7 +290,6 @@ EndlessVoid.prototype.handleKeys = function() {
         this.space_ship.y = 0
         this.space_ship.speed = new Vector();
     }
-
 }
 
 $(function () {

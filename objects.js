@@ -340,7 +340,7 @@ SpaceShip.prototype.update = function() {
 }
 SpaceShip.prototype.shoot = function() {
     bullet = new Bullet(this.x,this.y);
-    bullet.speed=this.speed.copy()
+    bullet.speed = this.speed.copy()
     bullet.speed.add(rotate_point(20.5,0,0,0,this.angle))
     this.main.bullets.push(bullet)
 }
@@ -376,16 +376,16 @@ SpaceShip.prototype.rotateShapes = function() {
 SpaceShip.prototype.accelerate = function(amount) {
     this.accelerating = true;
     v = (this.acceleration*amount)
-    p = rotate_point(v,0,0,0,this.angle)
-    this.speed.x = this.speed.x+p.x
-    this.speed.y = this.speed.y+p.y
+    p = rotate_point(v, 0, 0, 0, this.angle)
+    this.speed.x = this.speed.x + p.x
+    this.speed.y = this.speed.y + p.y
     this.landed = false;
 }
 SpaceShip.prototype.turbo = function() {
     this.turbo_on = true;
     v = this.turbo_thrust
-    rot = rotate_point(v,0,0,0,this.angle)
-    p = new Vector( rot.x,rot.y )
+    rot = rotate_point(v, 0, 0, 0, this.angle)
+    p = new Vector( rot.x, rot.y )
     this.speed.add(p)
 }
 SpaceShip.prototype.maxSpeed = function() {
@@ -398,7 +398,7 @@ SpaceShip.prototype.land = function() {
 }
 
 SpaceShip.prototype.render = function(ctx) {
-    ctx.strokeStyle = "rgba(156,232,255, 0.9)";
+    ctx.strokeStyle = "rgba(156,232,255,0.9)";
     ctx.beginPath();
 
     p = this.main.bgTranslate(this.copy().add(this.shape_rot[0]))
