@@ -24,17 +24,34 @@ The ultimate goal is making it multi player.
 * [ ] Asteroids with polygons
 * [ ] Some other flying stuff?!
 * [ ] Create proper game logic
+   * [ ] Spawn on a planet (and respawn on previously visited planet on death)
    * [ ] Collision detection (space ships, bullets, planets)
+      * [ ] Simple circle and rectangle based collisions to improve performance
+      * [ ] Point collision for bullets
    * [ ] HUD displaying ship health, upgrades
    * [ ] Pickups for ship upgrades, points etc
    * [ ] Stars with orbiting planets (and planets with moons?)
-* [ ] Weapons / Upgrades
-   * [X] Minigun
-   * [ ] Missiles
-   * [ ] Bombs
-   * [ ] Mines?
-   * [ ] Turrets?
-   * [ ] Shield
+   * [ ] Ships
+      * [ ] Health
+      * [ ] Upgrades
+         * [ ] Shields
+            * [ ] Lighter shields against bullets
+            * [ ] Harder shields to survive crashing into planets
+         * [ ] Weapons
+            * [X] Minigun
+            * [ ] Missiles
+            * [ ] Heat seeking missiles
+            * [ ] Bombs
+            * [ ] Laser
+            * [ ] Force field or pulse to bump other ships away from you
+            * [ ] ...
+            * [ ] Mines?
+            * [ ] Turrets?
+   * [ ] Bullets (weapons fire different kinds of bullets)
+      * [ ] Bullet 'ownership' (who is dealing the damage)
+      * [ ] Damage amount
+      * [ ] Lifetime (prevent stray bullets from never disappearing if followed etc)
+      * [ ] Blast/Hit velocity (add directional velocity to target) 
 * [X] Separate update and render operations
 * [X] Fix stars and add parallax effect
 * [X] Pause game feature (Only in single player mode)
