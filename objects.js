@@ -296,6 +296,10 @@ function SpaceShip(main) {
     this.speed_v = 0;
     this.speed_max = 50
 
+    this.weapon = new Minigun(this.main, this);
+    //this.weapon = new Spreadgun(this.main, this);
+    //this.weapon = new Cannon(this.main, this);
+
     this.shape = [
         {x:10, y:0},
         {x:-6,  y:7},
@@ -339,10 +343,12 @@ SpaceShip.prototype.update = function() {
     }
 }
 SpaceShip.prototype.shoot = function() {
-    bullet = new Bullet(this.x,this.y);
-    bullet.speed = this.speed.copy()
-    bullet.speed.add(rotate_point(20.5,0,0,0,this.angle))
-    this.main.bullets.push(bullet)
+    //bullet = 
+    //bullet = new Bullet(this.x,this.y);
+    //bullet.speed = this.speed.copy()
+    //bullet.speed.add(rotate_point(20.5,0,0,0,this.angle))
+    //this.main.bullets.push(bullet)
+    this.weapon.fire()
 }
 SpaceShip.prototype.explode = function() {
     for (var i = 0; i < 20; i++) {

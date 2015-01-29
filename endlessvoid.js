@@ -11,6 +11,7 @@ function EndlessVoid() {
     this.interval_ms = 40;
     this.interval_id = null;
     this.paused = false;
+    this.last_update = new Date;
 
     this.origin = new Vector();
     this.space_ship = new SpaceShip(this);
@@ -60,6 +61,7 @@ EndlessVoid.prototype.tick = function() {
         this.update()
         this.render();
     }
+    this.last_update = new Date;
 }
 
 EndlessVoid.prototype.start = function() {
@@ -201,7 +203,6 @@ EndlessVoid.prototype.render = function() {
 
     // ctx.fillText("ship: "+parseInt(space_ship.x)+","+parseInt(space_ship.y),10,50);
     // ctx.fillText("orig ang: "+angle_to_target(space_ship,new Vector()),10,75);
-    // ctx.fillText("ship ang: "+space_ship.angle,10,100);
 
     ctx.strokeStyle = "rgba(240,240,210, .98)";
     for (var i = this.stars.length - 1; i >= 0; i--) {
@@ -262,6 +263,9 @@ EndlessVoid.prototype.render = function() {
 
     this.space_ship.render(ctx)
     this.renderMinimap(ctx)
+    now = new Date;
+    fps = 1000 / (now - this.last_update);
+    ctx.fillText(Math.round(fps) + " FPS", 10, 20);
 }
 
 EndlessVoid.prototype.handleKeys = function() {
