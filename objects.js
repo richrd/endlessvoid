@@ -296,9 +296,10 @@ function SpaceShip(main) {
     this.speed_v = 0;
     this.speed_max = 50
 
-    this.weapon = new Minigun(this.main, this);
+    //this.weapon = new Minigun(this.main, this);
     //this.weapon = new Spreadgun(this.main, this);
     //this.weapon = new Cannon(this.main, this);
+    this.weapon = new Ring(this.main, this);
 
     this.shape = [
         {x:10, y:0},

@@ -263,9 +263,17 @@ EndlessVoid.prototype.render = function() {
 
     this.space_ship.render(ctx)
     this.renderMinimap(ctx)
+
+    ctx.strokeStyle = "rgba(255,80,10, .9)";
+    ctx.beginPath()
+    p = new Vector(500, 500);
+    ctx.arc(p.x, p.y, 10, 0, Math.PI*2, true);
+    ctx.fillRect(p.x-1, p.y-1, 3, 3);
+    ctx.stroke();
+
     now = new Date;
     fps = 1000 / (now - this.last_update);
-    ctx.fillText(Math.round(fps) + " FPS", 10, 20);
+    ctx.fillText(Math.round(fps) + " FPS",  10, 20);
 }
 
 EndlessVoid.prototype.handleKeys = function() {
