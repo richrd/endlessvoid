@@ -56,6 +56,18 @@ The ultimate goal is making it multi player.
 * [X] Fix stars and add parallax effect
 * [X] Pause game feature (Only in single player mode)
 
+## Multiplayer implementation
+ * Connection
+   * UDP would be best, WebRTC not widely supperted
+   * Try WebSockets first instead
+   * If latency is a problem try to migrate to WebRTC
+ * Implement a proper timestep (ticks per second)
+ * Sync player states for only visible players
+ * Player state:
+   * Position, angle and speed
+   * Turning direction and acceleration
+   * 
+
 ## WISHLIST!
 1. [ ] Learn node.js (io.js)
 2. [ ] Create multi player server

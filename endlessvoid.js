@@ -34,6 +34,7 @@ function EndlessVoid() {
 EndlessVoid.prototype.load = function() {
     $(document.body).keydown($.proxy(function (evt) {
         var key = evt.keyCode;
+        console.log(key);
         if(!this.pressed_keys[key]) {
             this.pressed_keys[key] = true;
         }
@@ -45,13 +46,12 @@ EndlessVoid.prototype.load = function() {
         if (val) {
             this.pressed_keys[evt.keyCode] = false;
         }
-        if (key == 19) {
+        if (key == 19) { // Pause
             this.pause();
         }
-    }, this));
-
-    // Detect key
-    $(document.body).keyup($.proxy(function (evt) {
+        if(key == 87) { // W
+            this.space_ship.switch_weapon();
+        }
     }, this));
 }
 
@@ -215,20 +215,6 @@ EndlessVoid.prototype.render = function() {
         ctx.stroke();
     };
 
-    ctx.strokeStyle = "rgba(200,255,255, 1)";
-    for (var i = this.bullets.length - 1; i >= 0; i--) {
-        bullet = this.bullets[i]
-        ctx.beginPath();
-        p = this.bgTranslate(bullet)
-
-        ctx.arc(p.x,p.y,1,0,Math.PI*2,true);
-        ctx.stroke();
-        if(!isOnScreen(p))
-        {
-            this.bullets.splice(i,1)
-        }
-    };
-
     ctx.strokeStyle = "rgba(180,255,180, 1)";
     ctx.fillStyle = "rgba(0,10,0, 1)";
     for (var i = this.planets.length - 1; i >= 0; i--) {
@@ -251,6 +237,22 @@ EndlessVoid.prototype.render = function() {
         ctx.stroke()
     };
 
+    ctx.fillStyle = "rgba(200,255,255, 1)";
+    for (var i = this.bullets.length - 1; i >= 0; i--) {
+        bullet = this.bullets[i]
+        ctx.beginPath();
+        p = this.bgTranslate(bullet)
+        if(!isOnScreen(p))
+        {
+            this.bullets.splice(i, 1);
+            continue;
+        }
+        ctx.arc(p.x, p.y, bullet.radius, 0, Math.PI*2, true);
+        ctx.fill();
+    };
+
+
+
     ctx.strokeStyle = "rgba(180,180,255, .5)";
     ctx.beginPath();
     p = this.bgTranslate(new Vector());
@@ -264,40 +266,42 @@ EndlessVoid.prototype.render = function() {
     this.space_ship.render(ctx)
     this.renderMinimap(ctx)
 
-    ctx.strokeStyle = "rgba(255,80,10, .9)";
-    ctx.beginPath()
-    p = new Vector(500, 500);
-    ctx.arc(p.x, p.y, 10, 0, Math.PI*2, true);
-    ctx.fillRect(p.x-1, p.y-1, 3, 3);
-    ctx.stroke();
+    // Testing what a pickup item could look like
+    //ctx.strokeStyle = "rgba(255,80,10, .9)";
+    //ctx.beginPath()
+    //p = new Vector(500, 500);
+    //ctx.arc(p.x, p.y, 10, 0, Math.PI*2, true);
+    //ctx.fillRect(p.x-1, p.y-1, 3, 3);
+    //ctx.stroke();
+
 
     now = new Date;
     fps = 1000 / (now - this.last_update);
     ctx.fillText(Math.round(fps) + " FPS",  10, 20);
+    ctx.fillText(this.bullets.length + "BULLETS",  100, 20);
 }
 
 EndlessVoid.prototype.handleKeys = function() {
     // Handle keys.
-    if(this.pressed_keys[37]) {
+    if(this.pressed_keys[37]) { // Arrow Left
         this.space_ship.turn(-1)
     }
-    if(this.pressed_keys[39]) {
+    if(this.pressed_keys[39]) { // Arrow Right
         this.space_ship.turn(1)
     }
-    if(this.pressed_keys[38]) {
+    if(this.pressed_keys[38]) { // Arrow Up
         this.space_ship.accelerate(1)
     }
-    if(this.pressed_keys[40]) {
+    if(this.pressed_keys[40]) { // Arrow Down
         this.space_ship.accelerate(-1)
     }
-    if(this.pressed_keys[32]) {
+    if(this.pressed_keys[32]) { // Space
         this.space_ship.shoot()
     }
-    if(this.pressed_keys[90]) {
+    if(this.pressed_keys[90]) { // Z
         this.space_ship.turbo()
     }
-
-    if(this.pressed_keys[48]) {
+    if(this.pressed_keys[48]) { // 0
         this.space_ship.x = 0
         this.space_ship.y = 0
         this.space_ship.speed = new Vector();

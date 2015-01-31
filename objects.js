@@ -258,10 +258,11 @@ Sun.prototype.generate_planets = function() {
 /**
  * A bullet that the spaceship can fire
  */
-function Bullet(x,y,z) {
+function Bullet(x, y, z, radius) {
     this.x = typeof x !== 'undefined' ? x : 0;
     this.y = typeof y !== 'undefined' ? y : 0;
     this.z = typeof z !== 'undefined' ? z : 0;
+    this.radius = typeof radius !== 'undefined' ? radius : 1;
 }
 Bullet.prototype = new Particle( );
 
@@ -281,25 +282,29 @@ function SpaceShip(main) {
     this.color = "red"; // TODO: implement this
     this.angle = 180;
     this.angle = 0;
-    this.turn_amount = 6.2
-    this.turn_amount = 8.2
-    this.turn_amount = 9.9
+    this.turn_amount = 6.2;
+    this.turn_amount = 8.2;
+    this.turn_amount = 9.9;
     this.mass = 13*13;
-    this.radius = 10
+    this.radius = 10;
 
     this.landed = false;
-    this.acceleration = 0.35
-    this.acceleration = 0.45
+    this.acceleration = 0.35;
+    this.acceleration = 0.45;
     this.accelerating = false;
     this.turbo_on = false;
-    this.turbo_thrust = 2.45
+    this.turbo_thrust = 2.45;
     this.speed_v = 0;
-    this.speed_max = 50
+    this.speed_max = 50;
 
-    //this.weapon = new Minigun(this.main, this);
-    //this.weapon = new Spreadgun(this.main, this);
-    //this.weapon = new Cannon(this.main, this);
-    this.weapon = new Ring(this.main, this);
+    this.weapons = [];
+    this.weapons.push( new Minigun(this.main, this) );
+    this.weapons.push( new Spreadgun(this.main, this) );
+    this.weapons.push( new Cannon(this.main, this) );
+    this.weapons.push( new Ring(this.main, this) );
+    this.weapon_index = 0;
+    this.weapon = this.weapons[0];
+
 
     this.shape = [
         {x:10, y:0},
@@ -343,13 +348,15 @@ SpaceShip.prototype.update = function() {
         this.main.updateStars(add)
     }
 }
+SpaceShip.prototype.switch_weapon = function() {
+    this.weapon_index += 1;
+    if(this.weapon_index >= this.weapons.length) {
+        this.weapon_index = 0
+    }
+    this.weapon = this.weapons[this.weapon_index]
+}
 SpaceShip.prototype.shoot = function() {
-    //bullet = 
-    //bullet = new Bullet(this.x,this.y);
-    //bullet.speed = this.speed.copy()
-    //bullet.speed.add(rotate_point(20.5,0,0,0,this.angle))
-    //this.main.bullets.push(bullet)
-    this.weapon.fire()
+    this.weapon._fire()
 }
 SpaceShip.prototype.explode = function() {
     for (var i = 0; i < 20; i++) {
