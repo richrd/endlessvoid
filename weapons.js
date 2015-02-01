@@ -7,28 +7,19 @@ function Weapon(main, ship) {
     this.ship = ship;
 
     this.name = "";
-    this.fire_delay = 0 // Number of frames to wait between shots
-    this.fire_counter = 0;
-
+    this.fire_time = 0;
+    this.fire_delay = 0 // Minimum time in ms to wait between shots
 }
 Weapon.prototype._can_fire = function() {
-    if(this.fire_delay) {
-        if(this.fire_counter == 0) {
-            this.fire_counter += 1;
-            return true;
-        } else if(this.fire_counter > this.fire_delay) {
-            this.fire_counter = 0;
-            return false;
-        }
-        this.fire_counter += 1;
-        return false;
+    now = new Date;
+    if(now - this.fire_time > this.fire_delay) {
+        return true;
     }
-
-    return true;
 }
 Weapon.prototype._fire = function() {
     if(this._can_fire()) {
         this.fire();
+        this.fire_time = new Date;
         return true;
     }
     
@@ -53,10 +44,11 @@ function Minigun(main, ship) {
     this.main = main;
     this.ship = ship;
     this.name = "Minigun";
+    this.fire_delay = 28;
 }
 Minigun.prototype = new Weapon( );
 Minigun.prototype.fire = function() {
-    this.add_bullet(0, 10)
+    this.add_bullet(0, 20)
 }
 
 
@@ -65,6 +57,7 @@ function Spreadgun(main, ship) {
     this.main = main;
     this.ship = ship;
     this.name = "Spreadgun";
+    this.fire_delay = 100;
 }
 Spreadgun.prototype = new Weapon( );
 Spreadgun.prototype.fire = function() {
@@ -80,8 +73,8 @@ function Cannon(main, ship) {
     this.main = main;
     this.ship = ship;
     this.name = "Cannon";
-    this.fire_delay = 5 // Number of frames to wait between shots
-    this.fire_counter = 0;
+    this.fire_delay = 333;
+    this.fire_time = 0;
 }
 Cannon.prototype = new Weapon( );
 Cannon.prototype.fire = function() {
@@ -95,8 +88,8 @@ function Ring(main, ship) {
     this.main = main;
     this.ship = ship;
     this.name = "Ring";
-    this.fire_delay = 20 // Number of frames to wait between shots
-    this.fire_counter = 0;
+    this.fire_delay = 1000;
+    this.fire_time = 0;
 }
 Ring.prototype = new Weapon( );
 Ring.prototype.fire = function() {

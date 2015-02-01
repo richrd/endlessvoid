@@ -16,14 +16,16 @@ The ultimate goal is making it multi player.
 
 ## TODO
 
-* [ ] Optimize rendering and pre-render common graphics (pickups, planets?, 
+* [ ] Fix stars and add parallax effect. TODO: reposition all stars on hit
+* [ ] Optimize rendering and pre-render common graphics (pickups, etc.)
 * [ ] Clean up code and refactor it into proper modern js
 * [ ] ~~Improve planet generation~~ Design sun, planet and moon generation.
-* [ ] Different looking planets with more variation in size
+* [ ] Different looking planets with more variation in size (planet colors and possibly craters etc)
 * [ ] Different looking ships
 * [ ] Asteroids with polygons
 * [ ] Some other flying stuff?!
 * [ ] Create proper game logic
+   * [ ] Scale all movement by fps to get consistent speeds across platforms
    * [ ] Spawn on a planet (and respawn on previously visited planet on death)
    * [ ] Collision detection (space ships, bullets, planets)
       * [ ] Simple circle and rectangle based collisions to improve performance
@@ -31,7 +33,8 @@ The ultimate goal is making it multi player.
    * [ ] HUD displaying ship health, upgrades
    * [ ] Pickups for ship upgrades, points etc
    * [ ] Stars with orbiting planets (and planets with moons?)
-   * [ ] Ships
+   * [ ] Players (Ships)
+      * [ ] Name
       * [ ] Health
       * [ ] Upgrades
          * [ ] Shields
@@ -39,21 +42,27 @@ The ultimate goal is making it multi player.
             * [ ] Harder shields to survive crashing into planets
          * [ ] Weapons
             * [X] Minigun
+            * [X] Spread gun
+            * [X] Cannon
+            * [X] Bullet Ring
             * [ ] Missiles
             * [ ] Heat seeking missiles
-            * [ ] Bombs
+            * [ ] Bombs (that are 'dropped')
             * [ ] Laser
             * [ ] Force field or pulse to bump other ships away from you
             * [ ] ...
             * [ ] Mines?
             * [ ] Turrets?
-   * [ ] Bullets (weapons fire different kinds of bullets)
-      * [ ] Bullet 'ownership' (who is dealing the damage)
+   * [X] Bullets (weapons fire different kinds of bullets)
+      * [X] Name
+      * [X] Radius
+      * [X] Fire selay
       * [ ] Damage amount
+      * [ ] Bullet 'ownership' (who is dealing the damage)
       * [ ] Lifetime (prevent stray bullets from never disappearing if followed etc)
       * [ ] Blast/Hit velocity (add directional velocity to target) 
+      * [ ] Color?
 * [X] Separate update and render operations
-* [X] Fix stars and add parallax effect
 * [X] Pause game feature (Only in single player mode)
 
 ## Multiplayer implementation
@@ -61,8 +70,10 @@ The ultimate goal is making it multi player.
    * UDP would be best, WebRTC not widely supperted
    * Try WebSockets first instead
    * If latency is a problem try to migrate to WebRTC
+ * Model
+   * Server tracks the game model
+   * Server syncs the model state for only visible changes
  * Implement a proper timestep (ticks per second)
- * Sync player states for only visible players
  * Player state:
    * Position, angle and speed
    * Turning direction and acceleration
