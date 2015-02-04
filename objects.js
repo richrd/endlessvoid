@@ -142,6 +142,10 @@ function Planet(main) {
 }
 Planet.prototype = new Particle( );
 
+Planet.prototype.set_radius = function(radius) {
+    this.radius = radius;
+    this.mass = this.radius*this.radius;
+}
 Planet.prototype.warp = function() {
     p = new Vector();
     p.random(new Vector(window.innerWidth*(50,window.innerHeight*50,99)));

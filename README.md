@@ -79,11 +79,15 @@ The ultimate goal is making it multi player.
    * Turning direction and acceleration
    * 
 
-## WISHLIST!
+## WISHLIST! (Comming some time 2015!)
 1. [ ] Learn node.js (io.js)
 2. [ ] Create multi player server
 3. [ ] Implement game model at server
 4. [ ] And input and rendering on the client side
+
+## Bugs
+[ ] Ship explosion (and resetting stars) should happen at the end of next frame.
+    Currently stars positions are not properly reset.
 
 ## Brainstorming!
  * Different ambient soundscapes based on location

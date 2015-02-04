@@ -4,19 +4,33 @@
     <title>Endless Void</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <style type="text/css">
-    body {
-        background-color: #000;
-    }
-    #bg-canvas {
-        position: absolute;
-        top:0; left:0; right:0; bottom:0;
-    }
-    </style>
+    <link href='http://fonts.googleapis.com/css?family=Nova+Mono|Russo+One|Sarpanch:400,600,700|Nova+Square|Ruda|VT323' rel='stylesheet' type='text/css'>
+    <link href='style.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <div id="background">
-        <canvas id="bg-canvas" width="800" height="800"></canvas>
+    <div id="background" class="full-screen">
+        <canvas id="bg-canvas" class="full-screen" width="800" height="800"></canvas>
+    </div>
+    <div id="foreground" class="full-screen">
+        <div class="help">
+
+            <h1>Keys</h1>
+            <ul>
+                <li>
+                    <span>Arrows</span> Turn, accelerate and brake
+                </li>
+                <li>
+                    <span>Z</span> Hyper speed
+                </li>
+                <li>
+                    <span>Space</span> Shoot
+                </li>
+                <li>
+                    <span>W</span> Change weapon
+                </li>
+            </ul>
+
+        </div>
     </div>
     <script src="helpers.js"></script>
     <script src="objects.js"></script>

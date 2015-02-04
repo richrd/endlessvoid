@@ -110,6 +110,12 @@ EndlessVoid.prototype.bgLoad = function() {
     };
 
     // Create planets.
+    p = new Planet(this);
+    //p.random(new Vector(0, 0, 99));
+    p.set_radius(150);
+    this.planets.push(p)
+    this.space_ship.y = -160;
+    this.space_ship.angle = -90;
     for (var i = 0; i < this.planet_amount; i++) {
         p = new Planet(this);
         p.random(new Vector(window.innerWidth*40, window.innerHeight*40, 99));
