@@ -34,7 +34,6 @@ function EndlessVoid() {
 EndlessVoid.prototype.load = function() {
     $(document.body).keydown($.proxy(function (evt) {
         var key = evt.keyCode;
-        console.log(key);
         if(!this.pressed_keys[key]) {
             this.pressed_keys[key] = true;
         }
