@@ -16,6 +16,7 @@ The ultimate goal is making it multi player.
 
 ## TODO
 
+* [ ] Implement a proper timestep (ticks per second)
 * [ ] Fix stars and add parallax effect. TODO: reposition all stars on hit
 * [ ] Optimize rendering and pre-render common graphics (pickups, etc.)
 * [ ] Clean up code and refactor it into proper modern js
@@ -53,27 +54,50 @@ The ultimate goal is making it multi player.
             * [ ] ...
             * [ ] Mines?
             * [ ] Turrets?
-   * [X] Bullets (weapons fire different kinds of bullets)
+            
+   * [X] Bullets (weapons fire different kinds of bullets, rename to Particle?)
       * [X] Name
       * [X] Radius
       * [X] Fire selay
+      * [ ] Color
       * [ ] Damage amount
       * [ ] Bullet 'ownership' (who is dealing the damage)
       * [ ] Lifetime (prevent stray bullets from never disappearing if followed etc)
+      * [ ] Twinkling bullets, like stars (as if they're burning)
       * [ ] Blast/Hit velocity (add directional velocity to target) 
-      * [ ] Color?
+      * [ ] Posibility to emit more particles while traveling or when explding.
 * [X] Separate update and render operations
 * [X] Pause game feature (Only in single player mode)
 
 ## Multiplayer implementation
- * Connection
-   * UDP would be best, WebRTC not widely supperted
-   * Try WebSockets first instead
+ * Logic
+   * The game must be deterministic. That means:
+     * Drop floating point operations? :(
+     * With certain inputs the output is always the same
+     * Enables fully accurate client side simulation 
+ * Networking / Connection
+   * UDP is the DOPE for game dev, but unfortunately it's only in WebRTC, wich isn't widely supperted.
+   * Try WebSockets first instead (TCP sucks for real time)
+   * Client and server interaction options:
+     * Deterministic lockstep: client only sends inputs, server updates game.
+       * Game speed depends on slowest player :(
+     * State syncing
+       * Client can simulate future events
+       * and server sends corrections (delta game state)
+       * 
    * If latency is a problem try to migrate to WebRTC
+   * If there still are serious latency problems:
+     * First implement LAN playing with suitable abstraction
+     * Improve the abstraction to support latency
+     * If all above fails, and multiplayer wont work:
+       * Scrap the web version and migrate to Go
+         * No browser limitations
+         * UDP Support
+         * Easy to read and write
+         * Efficent
  * Model
    * Server tracks the game model
    * Server syncs the model state for only visible changes
- * Implement a proper timestep (ticks per second)
  * Player state:
    * Position, angle and speed
    * Turning direction and acceleration
@@ -84,6 +108,7 @@ The ultimate goal is making it multi player.
 2. [ ] Create multi player server
 3. [ ] Implement game model at server
 4. [ ] And input and rendering on the client side
+5. [ ] If all above is not feasible: rewrite entire game in Go
 
 ## Bugs
 [ ] Ship explosion (and resetting stars) should happen at the end of next frame.
