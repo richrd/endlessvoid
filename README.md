@@ -41,6 +41,7 @@ The ultimate goal is making it multi player.
          * [ ] Shields
             * [ ] Lighter shields against bullets
             * [ ] Harder shields to survive crashing into planets
+            * [ ] Invisibility
          * [ ] Weapons
             * [X] Minigun
             * [X] Spread gun
