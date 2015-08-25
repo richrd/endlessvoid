@@ -10,7 +10,7 @@
     .    .    .      .   .
 
 Infinite space to explore with a space ship on a HTML5 Canvas.
-The idea is to develope this into a game like direction.
+The idea is to develop this into a game like direction.
 The ultimate goal is making it multi player.
 
 ## Demo!
