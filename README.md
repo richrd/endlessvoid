@@ -1,4 +1,4 @@
-# endlessvoid
+# endlessvoid :rocket:
 
     .     .        .    
        '     /\  .      '
@@ -12,6 +12,11 @@
 Infinite space to explore with a space ship on a HTML5 Canvas.
 The idea is to develope this into a game like direction.
 The ultimate goal is making it multi player.
+
+## Demo!
+
+[Test it out here.](http://richrd.github.io/) (http://richrd.github.io/)
+*The current version is still really bare.*
 
 
 ## TODO
