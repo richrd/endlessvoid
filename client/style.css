@@ -1,0 +1,12 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-weight: 600;
+}
+.full-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
