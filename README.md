@@ -10,8 +10,8 @@
     .    .    .      .   .
 
 Infinite space to explore with a space ship on a HTML5 Canvas.
-The idea is to develop this into a game like direction.
-The ultimate goal is making it multi player.
+The idea is to develop this into a game-like direction.
+The ultimate goal is making it multiplayer.
 
 ## Demo!
 
@@ -31,7 +31,7 @@ The ultimate goal is making it multi player.
 * [ ] Asteroids with polygons
 * [ ] Some other flying stuff?!
 * [ ] Create proper game logic
-   * [ ] Scale all movement by fps to get consistent speeds across platforms
+   * [ ] Scale all movement by FPS to get consistent speeds across platforms
    * [ ] Spawn on a planet (and respawn on previously visited planet on death)
    * [ ] Collision detection (space ships, bullets, planets)
       * [ ] Simple circle and rectangle based collisions to improve performance
@@ -90,12 +90,11 @@ The ultimate goal is making it multi player.
      * State syncing
        * Client can simulate future events
        * and server sends corrections (delta game state)
-       * 
    * If latency is a problem try to migrate to WebRTC
    * If there still are serious latency problems:
      * First implement LAN playing with suitable abstraction
      * Improve the abstraction to support latency
-     * If all above fails, and multiplayer wont work:
+     * If all above fails, and multiplayer won't work:
        * Scrap the web version and migrate to Go
          * No browser limitations
          * UDP Support
@@ -107,7 +106,6 @@ The ultimate goal is making it multi player.
  * Player state:
    * Position, angle and speed
    * Turning direction and acceleration
-   * 
 
 ## WISHLIST! (Comming some time 2015!)
 1. [ ] Learn node.js (io.js)
@@ -117,8 +115,8 @@ The ultimate goal is making it multi player.
 5. [ ] If all above is not feasible: rewrite entire game in Go
 
 ## Bugs
-[ ] Ship explosion (and resetting stars) should happen at the end of next frame.
-    Currently stars positions are not properly reset.
+* [ ] Ship explosion (and resetting stars) should happen at the end of next frame.
+  *  Currently star positions are not properly reset.
 
 ## Brainstorming!
  * Different ambient soundscapes based on location
@@ -131,14 +129,14 @@ The ultimate goal is making it multi player.
  * Different kind of techologies: for attacking, for mining and gathering other resources, for defence, for navigation (maps etc.) and for traveling
  * Portals
  * Missiles (can only detonate themselves) and spy vehicles (invisible) _which you can control_. Defence tech for detechting spies and destroying missiles) 
- * Fuel: you cant travel forever fast --> better fuel as you build your base and dig deeper --> super tech later (teleporting etc)
+ * Fuel: you can't travel fast forever --> better fuel as you build your base and dig deeper --> super tech later (teleporting etc)
  * Allianced which start building their cities from zero (newcomers can build their own or join ones already existing)
  * Different kind of alliances: anarchist, hierarchial, capitalist etc. For example: anarchist-communist alliance has no private owning of resources,
    no central leadership, can swap the space ship they fly [no-one own ships, but they can require skill which must be personally acquired], and no _central_ resources, lots of negotiance etc.
  * Different game strategies: individual vs collective and centralized against noncentralized --> both strategies are good in their own ways
  * Different kind of politics (depending on kind of the alliance) which affect the way you make decisions between co-players (discussion and voting, consensus or despotic) 
  * You can dig and find precious metals and minerals inside planets
- * Trick s: you can for example travel without fuel by using storm currents and gravity force of planets
+ * Tricks: e.g. travel without fuel by using storm currents and gravity force of planets
  * UFO's: which can bring messages from unknown galaxies and new technology or sudden destruction (which can also be caused by meteorites)
  * Epic lore!!!11111
      * For history of humans and different alliances
