@@ -1,0 +1,9 @@
+{
+    "watch": ["src", "../common"],
+    "ext": "ts",
+    "ignore": ["src/**/*.spec.ts"],
+    "exec": "ts-node ./src/index.ts",
+	"events": {
+		"restart": "fuser -k 9001/tcp"
+	}
+}
