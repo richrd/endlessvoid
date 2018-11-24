@@ -1,0 +1,10 @@
+{
+    "name": "endlessvoid",
+    "version": "0.0.1",
+    "license": "MIT",
+    "description": "Multiplayer Space Shooter",
+    "author": "Richard Lewis",
+    "devDependencies": {
+        "prettier": "^1.15.2"
+    }
+}
