@@ -1,7 +1,7 @@
 const WebSocket = require("ws")
 const http = require("http")
 
-import { Logging } from "./logging"
+import { Logging } from "../../common/src/logging/logging"
 
 class Server {
     private httpServer: any

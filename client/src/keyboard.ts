@@ -1,3 +1,6 @@
+
+import { Logging } from "../../common/src/logging/logging"
+
 const KEY_ARROW_UP = 38
 const KEY_ARROW_DOWN = 40
 const KEY_ARROW_LEFT = 37
@@ -8,7 +11,7 @@ const KEY_ARROW_RIGHT = 39
  */
 class Keyboard {
     public debug: boolean = false
-
+    private logger: any = Logging.newLogger("Keyboard")
     private pressed_keys: boolean[]
     private keyDown: Function
     private keyUp: Function
@@ -45,8 +48,8 @@ class Keyboard {
     keysChanged() {
         // Debugging
         if (this.debug) {
-            console.log("Key Indices:", Object.keys(this.pressed_keys))
-            console.log("Key State:", this.pressed_keys)
+            this.logger.log("Key Indices:", Object.keys(this.pressed_keys))
+            this.logger.log("Key State:", this.pressed_keys)
         }
     }
 

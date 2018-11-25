@@ -1,6 +1,6 @@
 const MainLoop = require("mainloop.js")
 
-import { Logging } from "./logging"
+import { Logging } from "../../common/src/logging/logging"
 import { Server } from "./server"
 import { Client } from "./client"
 

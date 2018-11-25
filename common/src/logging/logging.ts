@@ -33,9 +33,11 @@ const type_to_color: any = {
     success: console_colors.fg_green,
 }
 
+const isBrowser = new Function("try {return !!window;}catch(e){ return false;}")
+
 // Logging manager that has access to all existing loggers
 class LoggingManager {
-    public use_color: boolean = true
+    private isBrowser = isBrowser()
 
     constructor() {}
 
@@ -45,19 +47,37 @@ class LoggingManager {
         return logger
     }
 
-    // Print logs to terminal in a nice format
-    logToConsole(logger: Logger, type: string, data: any) {
+    log(logger: Logger, type: string, data: any) {
+        if (this.isBrowser) {
+            this.logToBrowser(logger, type, data)
+        } else {
+            this.logToNode(logger, type, data)
+        }
+    }
+
+    // Print logs to browser console
+    logToBrowser(logger: Logger, type: string, data: any) {
         const console_func = console_functions[type]
             ? console_functions[type]
             : console.log
         // Padded type string
+        const type_str = type.toUpperCase() + Array(8 - type.length).join(" ")
+        const message = data.toString()
+        const text = `${logger.name}: ${message}`
+        console_func(text)
+    }
+
+    // Print logs to terminal in a nice format
+    logToNode(logger: Logger, type: string, data: any) {
+        const console_func = console_functions[type]
+            ? console_functions[type]
+            : console.log
         const timestamp = new Date().toString()
+        // Padded type string
         const type_str = type.toUpperCase() + Array(8 - type.length).join(" ")
         const message = data.toString()
         let text = `${timestamp} | ${type_str} | ${logger.name}: ${message}`
-        if (this.use_color) {
-            text = type_to_color[type] + text + console_colors.reset
-        }
+        text = type_to_color[type] + text + console_colors.reset
         console_func(text)
     }
 }
@@ -74,7 +94,7 @@ class Logger {
 
     // All logging goes through this function
     handleLogEntry(type: string, data: any) {
-        this.parent.logToConsole(this, type, data)
+        this.parent.log(this, type, data)
     }
 
     // Log generic data

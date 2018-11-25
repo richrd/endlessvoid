@@ -2,7 +2,7 @@ import {
     MSG_TYPE_CLIENT_KEY_STATE,
     MSG_TYPE_SERVER_STATE,
 } from "../../common/src/constants"
-import { Logging } from "./logging"
+import { Logging } from "../../common/src/logging/logging"
 import { GameObject } from "../../common/src/objects/gameobject"
 
 class Client {

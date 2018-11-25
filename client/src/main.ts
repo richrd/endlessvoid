@@ -1,4 +1,5 @@
 const MainLoop = require("mainloop.js")
+import { Logging } from "../../common/src/logging/logging"
 import { Vector } from "../../common/src/objects/vector"
 import { Socket } from "./socket"
 import { Renderer } from "./renderer"
@@ -15,6 +16,7 @@ import {
 } from "./keyboard"
 
 class Main {
+    private logger: any = Logging.newLogger("Main")
     private renderer: Renderer
     private keyboard: Keyboard
     private socket: Socket = new Socket()
@@ -23,7 +25,7 @@ class Main {
     constructor() {}
 
     init() {
-        console.log("Main.init()")
+        this.logger.log("init")
         this.renderer = new Renderer("#canvas")
         this.renderer.init()
         this.keyboard = new Keyboard()
@@ -49,7 +51,7 @@ class Main {
     }
 
     run() {
-        console.log("Main.run()")
+        this.logger.log("run")
         this.renderer.clear()
         this.renderer.setDefaultStyles()
 
