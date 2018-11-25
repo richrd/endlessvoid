@@ -3,7 +3,9 @@ import {
     MSG_TYPE_SERVER_STATE,
 } from "../../common/src/constants"
 import { Logging } from "../../common/src/logging/logging"
+import { Vector } from "../../common/src/objects/vector"
 import { GameObject } from "../../common/src/objects/gameobject"
+import { SpaceShip } from "../../common/src/objects/spaceship"
 
 class Client {
     public game: any
@@ -15,7 +17,7 @@ class Client {
         up: 0,
         down: 0,
     }
-    public state: GameObject = new GameObject()
+    public state: SpaceShip = new SpaceShip()
     private closed = false
     private logger: any = Logging.newLogger("Client")
     private socket: any
@@ -40,18 +42,23 @@ class Client {
 
     update(delta: number) {
         const acceleration = 0.001
+        const turn_rate = 0.18
+
 
         if (this.key_state.left) {
-            this.state.speed.x -= acceleration * delta
+            //this.state.speed.x -= acceleration * delta
+            this.state.angle += turn_rate * delta
         }
         if (this.key_state.right) {
-            this.state.speed.x += acceleration * delta
+            this.state.angle -= turn_rate * delta
         }
         if (this.key_state.up) {
-            this.state.speed.y -= acceleration * delta
+            const v = new Vector(acceleration * delta, 0).rotate(this.state.angle)
+            this.state.speed.add(v)
         }
         if (this.key_state.down) {
-            this.state.speed.y += acceleration * delta
+            const v = new Vector(-acceleration * delta, 0).rotate(this.state.angle)
+            this.state.speed.add(v)
         }
 
         const adjustedSpeed = this.state.speed.copy().mul(delta)
