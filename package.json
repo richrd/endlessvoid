@@ -6,7 +6,7 @@
     "author": "Richard Lewis",
     "scripts": {
         "install": "(cd server; yarn install) ; (cd client; yarn install)"
-	},
+    },
     "devDependencies": {
         "prettier": "^1.15.2"
     }
