@@ -7,8 +7,7 @@ import { Logging } from "../../common/src/logging/logging"
 class Socket {
     public connection: any
     private logger: any = Logging.newLogger("Socket")
-    private WebSocket =
-        (window as any).WebSocket || (window as any).MozWebSocket
+    private WebSocket = (window as any).WebSocket
     private open: boolean = false
 
     constructor() {}
