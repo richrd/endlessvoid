@@ -14,10 +14,7 @@ class Server {
     private logger: any = Logging.newLogger("Server")
 
     constructor() {
-        this.httpServer = http.createServer(function(
-            request: any,
-            response: any
-        ) {
+        this.httpServer = http.createServer((request: any, response: any) => {
             this.logger.log("HTTP request:" + request.url)
             response.writeHead(404)
             response.end()
