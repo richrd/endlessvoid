@@ -11,7 +11,7 @@ class Main {
     private clients: Client[] = []
     private lastClientId = 0
     private logger: any = Logging.newLogger("Main")
-    private clientUpdateInterval: any
+    private clientUpdateInterval: NodeJS.Timeout;
 
     constructor() {}
 
