@@ -3,6 +3,9 @@ import { Logging } from "../../common/src/logging/logging"
 import { Vector } from "../../common/src/objects/vector"
 import { Socket } from "./socket"
 import { Renderer } from "./renderer"
+
+const SERVER_PORT = require("../../config.json").server_port
+
 import {
     MSG_TYPE_CLIENT_KEY_STATE,
     MSG_TYPE_SERVER_STATE,
@@ -40,7 +43,7 @@ class Main {
         // - 0.0.0.0
         // - 192.168.1.123
         const ws_host = window.location.host.split(":")[0]
-        this.socket.connect(`ws://${ws_host}:9001`)
+        this.socket.connect(`ws://${ws_host}:${SERVER_PORT}`)
         this.socket.bind()
         this.socket.connection.onmessage = (message: any) => {
             const data = JSON.parse(message.data)

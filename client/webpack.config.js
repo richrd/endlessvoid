@@ -1,6 +1,8 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
+const CLIENT_PORT = require("../config.json").client_port
+
 // TODO: move this to ./webpack and differentiate dev and prod config
 
 module.exports = {
@@ -27,6 +29,6 @@ module.exports = {
         contentBase: path.join(__dirname, "dist"),
         compress: true,
         host: "0.0.0.0",
-        port: 9000,
+        port: CLIENT_PORT,
     },
 }

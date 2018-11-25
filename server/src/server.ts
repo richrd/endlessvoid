@@ -3,10 +3,12 @@ const http = require("http")
 
 import { Logging } from "../../common/src/logging/logging"
 
+const SERVER_PORT = require("../../config.json").server_port
+
 class Server {
     private httpServer: any
     private wsServer: any
-    private port = 9001
+    private port = SERVER_PORT
     private protocol_name = "dummy-protocol"
     private onConnect: null | Function = null
     private logger: any = Logging.newLogger("Server")
