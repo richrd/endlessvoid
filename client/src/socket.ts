@@ -1,6 +1,6 @@
 import {
     MSG_TYPE_HANDSHAKE_CLIENT,
-    MSG_TYPE_SERVER_PLAYER_STATE,
+    MSG_TYPE_SERVER_STATE,
 } from "../../common/src/constants"
 
 class Socket {
@@ -25,7 +25,6 @@ class Socket {
                     type: MSG_TYPE_HANDSHAKE_CLIENT,
                 })
             )
-            // connection is opened and ready to use
         }
 
         this.connection.onerror = (error: any) => {

@@ -1,6 +1,6 @@
 import {
-    MSG_TYPE_KEY_STATE,
-    MSG_TYPE_SERVER_PLAYER_STATE,
+    MSG_TYPE_CLIENT_KEY_STATE,
+    MSG_TYPE_SERVER_STATE,
 } from "../../common/src/constants"
 import { Logging } from "./logging"
 import { GameObject } from "../../common/src/objects/gameobject"
@@ -26,7 +26,7 @@ class Client {
 
         this.socket.on("message", (message: any) => {
             const data = JSON.parse(message)
-            if (data.type === MSG_TYPE_KEY_STATE) {
+            if (data.type === MSG_TYPE_CLIENT_KEY_STATE) {
                 this.key_state = data
             }
         })
@@ -67,13 +67,10 @@ class Client {
         }
     }
 
-    sendUpdate() {
+    sendUpdate(state: any) {
         this.send({
-            type: MSG_TYPE_SERVER_PLAYER_STATE,
-            x: this.state.x,
-            y: this.state.y,
-            speed_x: this.state.speed.x,
-            speed_y: this.state.speed.y,
+            type: MSG_TYPE_SERVER_STATE,
+            state: state
         })
     }
 }

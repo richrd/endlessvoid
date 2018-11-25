@@ -17,7 +17,7 @@ class Renderer {
 
     setDefaultStyles() {
         this.ctx.strokeStyle = "rgba(255, 255, 255, 1)"
-        this.ctx.lineWidth = 1.5
+        this.ctx.lineWidth = 3
     }
 
     clear() {
@@ -26,19 +26,28 @@ class Renderer {
     }
 
     render(state: any) {
+        if (!state) {
+            return;
+        }
+
         this.clear()
         this.setDefaultStyles()
+
         const center_x = window.innerWidth / 2
         const center_y = window.innerHeight / 2
 
-        this.ctx.arc(
-            center_x + state.x,
-            center_y + state.y,
-            5,
-            0,
-            FULL_CIRCLE_RADIANS
-        )
-        this.ctx.stroke()
+        for (const item of state) {
+            this.ctx.beginPath();
+            this.ctx.arc(
+                center_x + item.x,
+                center_y + item.y,
+                5,
+                0,
+                FULL_CIRCLE_RADIANS
+            )
+            this.ctx.stroke()
+        }
+
     }
 }
 

@@ -76,11 +76,12 @@ class Main {
     }
 
     sendClientUpdates() {
+        let state = this.clients.map((client) => client.state.serialize())
         for (const client of this.clients) {
             if (!client) {
                 continue
             }
-            client.sendUpdate()
+            client.sendUpdate(state)
         }
     }
 
