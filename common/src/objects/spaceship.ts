@@ -2,7 +2,7 @@ import { Vector } from "./vector"
 import { GameObject } from "./gameobject"
 
 class SpaceShip extends GameObject {
-    public angle: number = 0
+    public angle: number = 90 // Up
 
     serialize() {
         return {

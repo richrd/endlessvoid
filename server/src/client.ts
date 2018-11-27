@@ -1,4 +1,5 @@
 import {
+    MSG_TYPE_CLIENT_HANDSHAKE,
     MSG_TYPE_CLIENT_KEY_STATE,
     MSG_TYPE_SERVER_STATE,
 } from "../../common/src/constants"
@@ -22,15 +23,18 @@ class Client {
     private logger: any = Logging.newLogger("Client")
     private socket: any
 
-    constructor(game: any, socket: any) {
+    constructor(game: any, id: number, socket: any) {
         this.game = game
+        this.id = id
         this.socket = socket
 
-        this.socket.on("message", (message: any) => {
-            const data = JSON.parse(message)
-            if (data.type === MSG_TYPE_CLIENT_KEY_STATE) {
-                this.key_state = data
+        this.socket.on("message", (message: string | Buffer | ArrayBuffer) => {
+            if (typeof message === "string") {
+                this.handleStringMessage(message)
+            } else {
+                this.handleBinaryMessage(message)
             }
+
         })
 
         this.socket.on("close", () => {
@@ -38,6 +42,37 @@ class Client {
             this.closed = true
             this.game.removeClient(this)
         })
+    }
+
+    handleStringMessage(message: string) {
+        // Parse the message as JSON
+        let data: any = null;
+        try {
+            data = JSON.parse(message)
+        } catch(e) {
+            this.logger.error("Unable parse message:" + message)
+            return false;
+        }
+
+        // The type is mandatory
+        if (data.type === undefined) {
+            this.logger.warn("Message missing type:" + message)
+            return false;
+        }
+
+        // React to different types of messages
+        if (data.type === MSG_TYPE_CLIENT_HANDSHAKE) {
+            this.logger.info("Client connected:" + message)
+        } else if (data.type === MSG_TYPE_CLIENT_KEY_STATE) {
+            this.key_state = data
+        } else {
+            this.logger.warn("Unknown message type:" + data.type)
+        }
+    }
+
+    handleBinaryMessage(message: Buffer | ArrayBuffer) {
+        // TODO: Implement this
+        this.logger.log(message)
     }
 
     update(delta: number) {

@@ -24,6 +24,7 @@ class Main {
     private keyboard: Keyboard
     private socket: Socket = new Socket()
     private state: any
+    private last_key_state: any = null;
 
     constructor() {}
 
@@ -77,21 +78,31 @@ class Main {
     sendKeyState() {
         // TODO: implement the binary protocol
         //       for now JSON is used for testing
-        // const keyboard_state_bits = [
-        //     this.keyboard.isDown(KEY_ARROW_LEFT) ? 1 : 0,
-        //     this.keyboard.isDown(KEY_ARROW_RIGHT) ? 1 : 0,
-        //     this.keyboard.isDown(KEY_ARROW_UP) ? 1 : 0,
-        //     this.keyboard.isDown(KEY_ARROW_DOWN) ? 1 : 0,
-        // ].join("")
-        // const keyboard_state_int = parseInt("0x" + keyboard_state_bits);
-        const state = {
+        // const kbd = this.keyboard
+        // let kbd_state = 0x0000
+        // kbd_state = kbd_state ^ (kbd.isDown(KEY_ARROW_LEFT)  ? 0x1000 : 0x0000)
+        // kbd_state = kbd_state ^ (kbd.isDown(KEY_ARROW_RIGHT) ? 0x0100 : 0x0000)
+        // kbd_state = kbd_state ^ (kbd.isDown(KEY_ARROW_UP)    ? 0x0010 : 0x0000)
+        // kbd_state = kbd_state ^ (kbd.isDown(KEY_ARROW_DOWN)  ? 0x0001 : 0x0000)
+        // const kbd_array = new Uint32Array(new ArrayBuffer(4))
+        // kbd_array[0] = kbd_state
+        // for (var i = 0; i < array.length; ++i) {
+        //     array[i] = i / 2;
+        // }
+
+        const state = JSON.stringify({
             type: MSG_TYPE_CLIENT_KEY_STATE,
             left: this.keyboard.isDown(KEY_ARROW_LEFT) ? 1 : 0,
             right: this.keyboard.isDown(KEY_ARROW_RIGHT) ? 1 : 0,
             up: this.keyboard.isDown(KEY_ARROW_UP) ? 1 : 0,
             down: this.keyboard.isDown(KEY_ARROW_DOWN) ? 1 : 0,
+        })
+
+        // Only send the state if it's changed
+        if (state != this.last_key_state) {
+            this.socket.send(state)
+            this.last_key_state = state
         }
-        this.socket.send(JSON.stringify(state))
     }
 }
 

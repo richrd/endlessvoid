@@ -1,5 +1,5 @@
 import {
-    MSG_TYPE_HANDSHAKE_CLIENT,
+    MSG_TYPE_CLIENT_HANDSHAKE,
     MSG_TYPE_SERVER_STATE,
 } from "../../common/src/constants"
 import { Logging } from "../../common/src/logging/logging"
@@ -23,7 +23,8 @@ class Socket {
             this.logger.log("Socket:onopen")
             this.send(
                 JSON.stringify({
-                    type: MSG_TYPE_HANDSHAKE_CLIENT,
+                    type: MSG_TYPE_CLIENT_HANDSHAKE,
+                    name: "Player"
                 })
             )
         }

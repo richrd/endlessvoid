@@ -4,14 +4,14 @@ import { Logging } from "../../common/src/logging/logging"
 import { Server } from "./server"
 import { Client } from "./client"
 
-const network_update_ms = 1000 / 40 // 25ms
+const network_update_ms = 1000 / 40 // 25ms (40fps)
 
 class Main {
     private server: Server = new Server()
-    private clients: Client[] = []
+    private clients: any = {}
     private lastClientId = 0
     private logger: any = Logging.newLogger("Main")
-    private clientUpdateInterval: NodeJS.Timeout;
+    private clientUpdateInterval: NodeJS.Timeout
 
     constructor() {}
 
@@ -48,26 +48,35 @@ class Main {
     // Called with the socket object when a client connects
     clientConnected(socket: any) {
         // TODO: verify the connection before adding
-        if (!this.clients.length) {
+        if (!this.getClients().length) {
             // Start the loop if this is the first client
             this.start()
         }
         this.addClient(socket)
     }
 
+    newClientId() {
+        this.lastClientId += 1
+        return this.lastClientId
+    }
+
     // Run when a client connection is verified
     addClient(socket: any) {
-        const client = new Client(this, socket)
-        this.clients.push(client)
-        this.logger.log("Total clients:" + this.clients.length)
+        const id = this.newClientId()
+        const client = new Client(this, id, socket)
+        this.clients[id] = client
+        this.logger.log("Total clients:" + this.getClients().length)
     }
 
     removeClient(client: Client) {
-        this.clients.splice(this.clients.indexOf(client), 1)
-
-        if (!this.clients.length) {
+        delete this.clients[client.id]
+        if (!this.getClients().length) {
             this.onAllClientsLeft()
         }
+    }
+
+    getClients(): Client[] {
+        return Object.values(this.clients)
     }
 
     onAllClientsLeft() {
@@ -76,11 +85,10 @@ class Main {
     }
 
     sendClientUpdates() {
-        let state = this.clients.map((client) => client.state.serialize())
-        for (const client of this.clients) {
-            if (!client) {
-                continue
-            }
+        const state = this.getClients().map((client: Client) =>
+            client.state.serialize()
+        )
+        for (const client of this.getClients()) {
             client.sendUpdate(state)
         }
     }
@@ -88,10 +96,7 @@ class Main {
     begin() {}
 
     update(delta: number) {
-        if (!this.clients) {
-            return
-        }
-        for (const client of this.clients) {
+        for (const client of this.getClients()) {
             client.update(delta)
         }
     }

@@ -1,6 +1,7 @@
 const WebSocket = require("ws")
 const http = require("http")
 
+import { GAME_PROTOCOL_NAME } from "../../common/src/constants"
 import { Logging } from "../../common/src/logging/logging"
 
 const SERVER_PORT = require("../../config.json").server_port
@@ -9,7 +10,7 @@ class Server {
     private httpServer: any
     private wsServer: any
     private port = SERVER_PORT
-    private protocol_name = "dummy-protocol"
+    private protocol_name = GAME_PROTOCOL_NAME
     private onConnect: null | Function = null
     private logger: any = Logging.newLogger("Server")
 
@@ -31,7 +32,7 @@ class Server {
         })
 
         this.wsServer.on("connection", (socket: any, request: any) => {
-            this.logger.success("Connected")
+            this.logger.success("New connection from: " + request.connection.remoteAddress)
 
             if (this.onConnect) {
                 this.onConnect(socket)
