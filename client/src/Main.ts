@@ -1,22 +1,22 @@
-const MainLoop = require("mainloop.js")
-import { Logging } from "../../common/src/logging/logging"
-import { Vector } from "../../common/src/objects/vector"
-import { Socket } from "./socket"
-import { Renderer } from "./renderer"
+const mainLoop = require("mainloop.js")
+import { Logging } from "../../common/src/Logging/LoggerManager"
+import { Vector } from "../../common/src/objects/Vector"
+import { Renderer } from "./Renderer"
+import { Socket } from "./Socket"
 
 const SERVER_PORT = require("../../config.json").server_port
 
 import {
     MSG_TYPE_CLIENT_KEY_STATE,
     MSG_TYPE_SERVER_STATE,
-} from "../../common/src/constants"
+} from "../../common/src/Constants"
 import {
-    Keyboard,
-    KEY_ARROW_UP,
     KEY_ARROW_DOWN,
     KEY_ARROW_LEFT,
     KEY_ARROW_RIGHT,
-} from "./keyboard"
+    KEY_ARROW_UP,
+    Keyboard,
+} from "./Keyboard"
 
 class Main {
     private logger: any = Logging.newLogger("Main")
@@ -24,11 +24,11 @@ class Main {
     private keyboard: Keyboard
     private socket: Socket = new Socket()
     private state: any
-    private last_key_state: any = null;
+    private last_key_state: any = null
 
-    constructor() {}
+    // constructor() {}
 
-    init() {
+    public init() {
         this.logger.log("init")
         this.renderer = new Renderer("#canvas")
         this.renderer.init()
@@ -54,28 +54,34 @@ class Main {
         }
     }
 
-    run() {
+    public run() {
         this.logger.log("run")
+        this.renderer.setSizeByViewport()
         this.renderer.clear()
         this.renderer.setDefaultStyles()
 
-        MainLoop.setBegin(() => this.begin())
+        mainLoop
+            .setBegin(() => this.begin())
             .setUpdate((delta: number) => this.update(delta))
             .setDraw(() => this.draw())
             .start()
     }
 
-    begin() {}
-
-    update(delta: number) {
+    public begin() {
         this.sendKeyState()
     }
 
-    draw() {
+    // tslint:disable-next-line
+    public update(delta: number) {
+        // tslint:disable-next-line
+        // Implement interpolation here
+    }
+
+    public draw() {
         this.renderer.render(this.state)
     }
 
-    sendKeyState() {
+    private sendKeyState() {
         // TODO: implement the binary protocol
         //       for now JSON is used for testing
         // const kbd = this.keyboard
@@ -99,7 +105,7 @@ class Main {
         })
 
         // Only send the state if it's changed
-        if (state != this.last_key_state) {
+        if (state !== this.last_key_state) {
             this.socket.send(state)
             this.last_key_state = state
         }

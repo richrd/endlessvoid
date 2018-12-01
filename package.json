@@ -6,7 +6,7 @@
     "author": "Richard Lewis",
     "scripts": {
         "install": "(cd server; yarn install) ; (cd client; yarn install)",
-        "lint": "tslint -c tslint.json '**/src/**/*.ts'"
+        "lint": "tslint -c tslint.json '*/src/**/*.ts'"
     },
     "devDependencies": {
         "prettier": "^1.15.2",

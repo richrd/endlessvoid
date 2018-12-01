@@ -4,6 +4,13 @@
         "tslint:recommended"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "variable-name": [true, "allow-leading-underscore", "allow-snake-case"],
+        "no-var-requires": false,
+        "object-literal-sort-keys": false,
+        "no-console": false,
+        "semicolon": [true, "never"],
+        "arrow-parens": [true, "ban-single-arg-parens"]
+    },
     "rulesDirectory": []
 }

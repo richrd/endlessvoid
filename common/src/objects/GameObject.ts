@@ -1,9 +1,9 @@
-import { Vector } from "./vector"
+import { Vector } from "./Vector"
 
 class GameObject extends Vector {
     public speed: Vector = new Vector()
 
-    serialize() {
+    public serialize() {
         return {
             x: this.x,
             y: this.y,

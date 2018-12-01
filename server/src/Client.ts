@@ -2,11 +2,12 @@ import {
     MSG_TYPE_CLIENT_HANDSHAKE,
     MSG_TYPE_CLIENT_KEY_STATE,
     MSG_TYPE_SERVER_STATE,
-} from "../../common/src/constants"
-import { Logging } from "../../common/src/logging/logging"
-import { Vector } from "../../common/src/objects/vector"
-import { GameObject } from "../../common/src/objects/gameobject"
-import { SpaceShip } from "../../common/src/objects/spaceship"
+} from "../../common/src/Constants"
+
+import { Logging } from "../../common/src/Logging/LoggerManager"
+import { GameObject } from "../../common/src/objects/GameObject"
+import { SpaceShip } from "../../common/src/objects/SpaceShip"
+import { Vector } from "../../common/src/objects/Vector"
 
 class Client {
     public game: any
@@ -34,7 +35,6 @@ class Client {
             } else {
                 this.handleBinaryMessage(message)
             }
-
         })
 
         this.socket.on("close", () => {
@@ -44,20 +44,63 @@ class Client {
         })
     }
 
-    handleStringMessage(message: string) {
+    public update(delta: number) {
+        const acceleration = 0.001
+        const turn_rate = 0.18
+
+        if (this.key_state.left) {
+            this.state.angle += turn_rate * delta
+        }
+        if (this.key_state.right) {
+            this.state.angle -= turn_rate * delta
+        }
+        if (this.key_state.up) {
+            const v = new Vector(acceleration * delta, 0).rotate(
+                this.state.angle,
+            )
+            this.state.speed.add(v)
+        }
+        if (this.key_state.down) {
+            const v = new Vector(-acceleration * delta, 0).rotate(
+                this.state.angle,
+            )
+            this.state.speed.add(v)
+        }
+
+        const adjustedSpeed = this.state.speed.copy().mul(delta)
+
+        this.state.add(adjustedSpeed)
+    }
+
+    public send(data: any) {
+        try {
+            this.socket.send(JSON.stringify(data))
+        } catch (e) {
+            this.logger.error("sending data failed", e)
+        }
+    }
+
+    public sendUpdate(state: any) {
+        this.send({
+            state,
+            type: MSG_TYPE_SERVER_STATE,
+        })
+    }
+
+    private handleStringMessage(message: string) {
         // Parse the message as JSON
-        let data: any = null;
+        let data: any = null
         try {
             data = JSON.parse(message)
-        } catch(e) {
+        } catch (e) {
             this.logger.error("Unable parse message:" + message)
-            return false;
+            return false
         }
 
         // The type is mandatory
         if (data.type === undefined) {
             this.logger.warn("Message missing type:" + message)
-            return false;
+            return false
         }
 
         // React to different types of messages
@@ -70,50 +113,9 @@ class Client {
         }
     }
 
-    handleBinaryMessage(message: Buffer | ArrayBuffer) {
+    private handleBinaryMessage(message: Buffer | ArrayBuffer) {
         // TODO: Implement this
         this.logger.log(message)
-    }
-
-    update(delta: number) {
-        const acceleration = 0.001
-        const turn_rate = 0.18
-
-
-        if (this.key_state.left) {
-            //this.state.speed.x -= acceleration * delta
-            this.state.angle += turn_rate * delta
-        }
-        if (this.key_state.right) {
-            this.state.angle -= turn_rate * delta
-        }
-        if (this.key_state.up) {
-            const v = new Vector(acceleration * delta, 0).rotate(this.state.angle)
-            this.state.speed.add(v)
-        }
-        if (this.key_state.down) {
-            const v = new Vector(-acceleration * delta, 0).rotate(this.state.angle)
-            this.state.speed.add(v)
-        }
-
-        const adjustedSpeed = this.state.speed.copy().mul(delta)
-
-        this.state.add(adjustedSpeed)
-    }
-
-    send(data: any) {
-        try {
-            this.socket.send(JSON.stringify(data))
-        } catch (e) {
-            this.logger.error("sending data failed", e)
-        }
-    }
-
-    sendUpdate(state: any) {
-        this.send({
-            type: MSG_TYPE_SERVER_STATE,
-            state: state
-        })
     }
 }
 

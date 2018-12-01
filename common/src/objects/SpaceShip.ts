@@ -1,10 +1,10 @@
-import { Vector } from "./vector"
-import { GameObject } from "./gameobject"
+import { GameObject } from "./GameObject"
+import { Vector } from "./Vector"
 
 class SpaceShip extends GameObject {
-    public angle: number = 90 // Up
+    public angle: number = 90 // North / Up
 
-    serialize() {
+    public serialize() {
         return {
             x: this.x,
             y: this.y,

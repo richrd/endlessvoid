@@ -1,11 +1,11 @@
-import { Main } from "./main"
+import { Main } from "./Main"
 
-function start() {
+const start = () => {
     const main = new Main()
     main.init()
     main.run()
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", event => {
     start()
 })

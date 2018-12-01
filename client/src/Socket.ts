@@ -1,8 +1,8 @@
 import {
     MSG_TYPE_CLIENT_HANDSHAKE,
     MSG_TYPE_SERVER_STATE,
-} from "../../common/src/constants"
-import { Logging } from "../../common/src/logging/logging"
+} from "../../common/src/Constants"
+import { Logging } from "../../common/src/Logging/LoggerManager"
 
 class Socket {
     public connection: any
@@ -10,22 +10,22 @@ class Socket {
     private WebSocket = (window as any).WebSocket
     private open: boolean = false
 
-    constructor() {}
+    // constructor() {}
 
-    connect(url: string) {
+    public connect(url: string) {
         this.logger.log(`Socket.connect(${url})`)
         this.connection = new WebSocket(url, "dummy-protocol")
     }
 
-    bind() {
+    public bind() {
         this.connection.onopen = () => {
             this.open = true
             this.logger.log("Socket:onopen")
             this.send(
                 JSON.stringify({
                     type: MSG_TYPE_CLIENT_HANDSHAKE,
-                    name: "Player"
-                })
+                    name: "Player",
+                }),
             )
         }
 
@@ -36,7 +36,7 @@ class Socket {
         }
     }
 
-    send(data: any) {
+    public send(data: any) {
         if (this.open) {
             this.connection.send(data)
         }

@@ -1,3 +1,4 @@
+import { Logger } from "./Logger"
 /*
  * Centralized logging feature
  */
@@ -39,15 +40,15 @@ const isBrowser = new Function("try {return !!window;}catch(e){ return false;}")
 class LoggingManager {
     private isBrowser = isBrowser()
 
-    constructor() {}
+    // constructor() {}
 
     // Get a new named logger instance
-    newLogger(name: string) {
+    public newLogger(name: string) {
         const logger = new Logger(this, name)
         return logger
     }
 
-    log(logger: Logger, type: string, data: any) {
+    public log(logger: Logger, type: string, data: any) {
         if (this.isBrowser) {
             this.logToBrowser(logger, type, data)
         } else {
@@ -56,7 +57,7 @@ class LoggingManager {
     }
 
     // Print logs to browser console
-    logToBrowser(logger: Logger, type: string, data: any) {
+    private logToBrowser(logger: Logger, type: string, data: any) {
         const console_func = console_functions[type]
             ? console_functions[type]
             : console.log
@@ -68,7 +69,7 @@ class LoggingManager {
     }
 
     // Print logs to terminal in a nice format
-    logToNode(logger: Logger, type: string, data: any) {
+    private logToNode(logger: Logger, type: string, data: any) {
         const console_func = console_functions[type]
             ? console_functions[type]
             : console.log
@@ -82,46 +83,6 @@ class LoggingManager {
     }
 }
 
-// Logger class that other components use for logging to console and/or file
-class Logger {
-    public name: string
-    private parent: LoggingManager
-
-    constructor(parent: LoggingManager, name: string) {
-        this.parent = parent
-        this.name = name
-    }
-
-    // All logging goes through this function
-    handleLogEntry(type: string, data: any) {
-        this.parent.log(this, type, data)
-    }
-
-    // Log generic data
-    log(data: any) {
-        this.handleLogEntry("log", data)
-    }
-
-    // Log informational data
-    info(data: any) {
-        this.handleLogEntry("info", data)
-    }
-
-    // Log success messages
-    success(data: any) {
-        this.handleLogEntry("success", data)
-    }
-
-    // Log warnings
-    warn(data: any) {
-        this.handleLogEntry("warn", data)
-    }
-
-    // Log errors
-    error(data: any) {
-        this.handleLogEntry("error", data)
-    }
-}
-
+// tslint:disable-next-line
 const Logging = new LoggingManager()
-export { Logging }
+export { Logging, LoggingManager }

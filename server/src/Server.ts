@@ -1,8 +1,8 @@
-const WebSocket = require("ws")
+const webSocket = require("ws")
 const http = require("http")
 
-import { GAME_PROTOCOL_NAME } from "../../common/src/constants"
-import { Logging } from "../../common/src/logging/logging"
+import { GAME_PROTOCOL_NAME } from "../../common/src/Constants"
+import { Logging } from "../../common/src/Logging/LoggerManager"
 
 const SERVER_PORT = require("../../config.json").server_port
 
@@ -22,17 +22,19 @@ class Server {
         })
     }
 
-    start() {
+    public start() {
         this.httpServer.listen(this.port, () => {
             this.logger.info("Listening at port " + this.port)
         })
 
-        this.wsServer = new WebSocket.Server({
+        this.wsServer = new webSocket.Server({
             server: this.httpServer,
         })
 
         this.wsServer.on("connection", (socket: any, request: any) => {
-            this.logger.success("New connection from: " + request.connection.remoteAddress)
+            this.logger.success(
+                "New connection from: " + request.connection.remoteAddress,
+            )
 
             if (this.onConnect) {
                 this.onConnect(socket)
@@ -40,7 +42,7 @@ class Server {
         })
     }
 
-    onClientConnect(callback: Function) {
+    public onClientConnect(callback: Function) {
         this.onConnect = callback
     }
 }

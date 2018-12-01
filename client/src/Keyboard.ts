@@ -1,5 +1,4 @@
-
-import { Logging } from "../../common/src/logging/logging"
+import { Logging } from "../../common/src/Logging/LoggerManager"
 
 const KEY_ARROW_UP = 38
 const KEY_ARROW_DOWN = 40
@@ -32,11 +31,11 @@ class Keyboard {
         }
     }
 
-    isDown(key: number) {
+    public isDown(key: number) {
         return this.pressed_keys[key]
     }
 
-    isTapped(key: number) {
+    public isTapped(key: number) {
         if (this.pressed_keys[key]) {
             this.pressed_keys[key] = false
             return true
@@ -45,22 +44,22 @@ class Keyboard {
         return false
     }
 
-    keysChanged() {
+    public bind() {
+        document.addEventListener("keydown", this.keyDown as any)
+        document.addEventListener("keyup", this.keyUp as any)
+    }
+
+    public unbind() {
+        document.removeEventListener("keydown", this.keyDown as any)
+        document.removeEventListener("keyup", this.keyUp as any)
+    }
+
+    private keysChanged() {
         // Debugging
         if (this.debug) {
             this.logger.log("Key Indices:", Object.keys(this.pressed_keys))
             this.logger.log("Key State:", this.pressed_keys)
         }
-    }
-
-    bind() {
-        document.addEventListener("keydown", this.keyDown as any)
-        document.addEventListener("keyup", this.keyUp as any)
-    }
-
-    unbind() {
-        document.removeEventListener("keydown", this.keyDown as any)
-        document.removeEventListener("keyup", this.keyUp as any)
     }
 }
 
